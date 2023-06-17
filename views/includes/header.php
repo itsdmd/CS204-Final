@@ -21,7 +21,7 @@
                     </li>
                     <?php if (isset($_SESSION['username'])) : ?>
                         <li class="nav-item dropdown active">
-                            <a class="nav-link dropdown-toggle" id="navbardrop" data-toggle="dropdown" href="<?php echo ROOT; ?>profile"><i class="fas fa-user"></i>
+                            <a class="nav-link" href="<?php echo ROOT; ?>profile"><i class="fas fa-user"></i>
                                 <?php echo $_SESSION['username']; ?></a>
                         </li>
                     <?php else : ?>

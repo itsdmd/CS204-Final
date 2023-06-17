@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 17, 2023 at 12:32 PM
+-- Generation Time: Jun 17, 2023 at 02:20 PM
 -- Server version: 8.0.33
 -- PHP Version: 8.1.20
 
@@ -24,32 +24,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comment`
---
-
-CREATE TABLE `comment` (
-  `id` int NOT NULL,
-  `type` int NOT NULL COMMENT '0: reply to post | 1: reply to comment',
-  `reply_to` int NOT NULL COMMENT 'ID of post/comment this entry is replying to',
-  `body` text COLLATE utf8mb4_unicode_ci NOT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `media`
---
-
-CREATE TABLE `media` (
-  `id` int NOT NULL,
-  `format` int NOT NULL COMMENT '0: jpg | 1: png',
-  `path` text COLLATE utf8mb4_unicode_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `post`
 --
 
@@ -59,58 +33,29 @@ CREATE TABLE `post` (
   `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `body` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `media_id` int DEFAULT NULL,
-  `tags` json DEFAULT NULL,
-  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tag`
---
-
-CREATE TABLE `tag` (
-  `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `user`
---
-
-CREATE TABLE `user` (
-  `username` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` tinyint NOT NULL DEFAULT '2' COMMENT '0: admin | 1: moderator | 2: user',
-  `avatar_id` int DEFAULT NULL COMMENT 'ID of media used as avatar',
+  `tags` text COLLATE utf8mb4_unicode_ci,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `post`
 --
 
-INSERT INTO `user` (`username`, `password`, `role`, `avatar_id`, `date_created`) VALUES
-('admin', '$2y$10$mj2xIOWiQRH5.0wtyZRhZ.SPGMjVHly.m3nKf71Jmi2K5qJ2Ekv9C', 0, NULL, '2023-06-17 16:27:25');
+INSERT INTO `post` (`id`, `author`, `title`, `body`, `media_id`, `tags`, `date_created`) VALUES
+(1, 'John Doe', 'Lorem Ipsum', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.', 1, 'lorem, ipsum', '2023-06-17 20:04:01'),
+(2, 'Jane Smith', 'Dolor Sit Amet', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 2, 'dolor, sit, amet', '2023-06-17 20:04:01'),
+(3, 'Bob Johnson', 'Consectetur Adipiscing', 'Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 3, 'consectetur, adipiscing', '2023-06-17 20:04:01'),
+(4, 'Alice Brown', 'Sed Do Eiusmod', 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.', 4, 'sed, do, eiusmod', '2023-06-17 20:04:01'),
+(5, 'admin', 'Tempor Incididunt', 'Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.', 5, 'tempor, incididunt', '2023-06-17 20:04:01'),
+(6, 'Emily Davis', 'Labore Et Dolore', 'Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit.', 6, 'labore, dolore', '2023-06-17 20:04:01'),
+(7, 'Mike Lee', 'Magna Aliqua', 'At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident.', 7, 'magna, aliqua', '2023-06-17 20:04:01'),
+(8, 'Sarah Kim', 'Enim Ad Minim', 'Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus.', 8, 'enim, ad, minim', '2023-06-17 20:04:01'),
+(9, 'David Chen', 'Quis Nostrud', 'Omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.', 9, 'quis, nostrud', '2023-06-17 20:04:01'),
+(10, 'admin', 'Dolor Sit Amet', 'Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.', 2, 'dolor, sit, amet', '2023-06-17 20:04:01');
 
 --
 -- Indexes for dumped tables
 --
-
---
--- Indexes for table `comment`
---
-ALTER TABLE `comment`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `media`
---
-ALTER TABLE `media`
-  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `post`
@@ -119,44 +64,14 @@ ALTER TABLE `post`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `tag`
---
-ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `user`
---
-ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`);
-
---
 -- AUTO_INCREMENT for dumped tables
 --
-
---
--- AUTO_INCREMENT for table `comment`
---
-ALTER TABLE `comment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `media`
---
-ALTER TABLE `media`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `tag`
---
-ALTER TABLE `tag`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

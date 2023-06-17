@@ -35,4 +35,25 @@ class Post {
 
         return $results->fetch_all(MYSQLI_ASSOC);
     }
+
+    public function createPost($title, $body, $author, $tags) {
+        $sql = "INSERT INTO post (title, body, author, tags) VALUES (?, ?, ?, ?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $title, $body, $author, $tags);
+        $stmt->execute();
+    }
+
+    public function editPost($id, $title, $body, $tags) {
+        $sql = "UPDATE post SET title = ?, body = ?, tags = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $title, $body, $tags, $id);
+        $stmt->execute();
+    }
+
+    public function deletePost($id) {
+        $sql = "DELETE FROM post WHERE id = ? AND author = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $id, $_SESSION["username"]);
+        $stmt->execute();
+    }
 }
