@@ -1,0 +1,13 @@
+{
+	"recommendations": [
+		"anbuselvanrocky.bootstrap5-vscode",
+		"bmewburn.vscode-intelephense-client",
+		"devsense.phptools-vscode",
+		"ecmel.vscode-html-css",
+		"esbenp.prettier-vscode",
+		"formulahendry.auto-close-tag",
+		"formulahendry.auto-rename-tag",
+		"redjue.git-commit-plugin",
+		"rifi2k.format-html-in-php"
+	]
+}
