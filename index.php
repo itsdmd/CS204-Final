@@ -19,7 +19,7 @@ include "core/Router.php";
 include "core/web.php";
 
 // if (!isset($_SESSION['username'])) {
-session_destroy();
+// session_destroy();
 // }
 
 echo "<h3>GET</h3>";

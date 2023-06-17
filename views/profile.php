@@ -20,17 +20,18 @@
                     <tr>
                         <th>ID</th>
                         <th>Title</th>
-                        <th>Author</th>
                         <th>Date created</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($posts as $post) : ?>
+                    <?php
+                    $posts = new PostCtrl();
+                    foreach ($posts->fetchAllPostsByCurrentUser() as $post) :
+                    ?>
                         <tr>
                             <td><?= $post["id"] ?></td>
                             <td><?= $post["title"] ?></td>
-                            <td><?= $post["username"] ?></td>
                             <td><?= $post["date_created"] ?></td>
                             <td>
                                 <a href="<?= ROOT ?>posts/edit/<?= $post["id"] ?>" class="btn btn-warning">Edit</a>
