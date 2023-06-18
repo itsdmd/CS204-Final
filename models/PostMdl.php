@@ -36,6 +36,16 @@ class Post {
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function fetchAllPostsNotByCurrentUser() {
+        $sql = "SELECT * FROM post WHERE author != ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $_SESSION["username"]);
+        $stmt->execute();
+        $results = $stmt->get_result();
+
+        return $results->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function createPost($title, $body, $author, $tags) {
         $sql = "INSERT INTO post (title, body, author, tags) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);

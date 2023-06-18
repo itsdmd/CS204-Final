@@ -5,6 +5,12 @@ class PostCtrl extends Controller {
         parent::__construct();
     }
 
+    public function viewPost() {
+        // $postctrl = new Post($this->conn);
+        // $post = $postctrl->fetchPostById($id);
+        include "views/viewPost.php";
+    }
+
     public function viewCreatePostPage() {
         include "views/createPost.php";
     }
@@ -14,18 +20,23 @@ class PostCtrl extends Controller {
     }
 
     public function fetchPostById($id) {
-        $post = new Post($this->conn);
-        return $post->fetchPostById($id);
+        $postctrl = new Post($this->conn);
+        return $postctrl->fetchPostById($id);
     }
 
     public function fetchAllPosts() {
-        $post = new Post($this->conn);
-        return $post->fetchAllPosts();
+        $postctrl = new Post($this->conn);
+        return $postctrl->fetchAllPosts();
     }
 
     public function fetchAllPostsByCurrentUser() {
-        $post = new Post($this->conn);
-        return $post->fetchAllPostsByCurrentUser();
+        $postctrl = new Post($this->conn);
+        return $postctrl->fetchAllPostsByCurrentUser();
+    }
+
+    public function fetchAllPostsNotByCurrentUser() {
+        $postctrl = new Post($this->conn);
+        return $postctrl->fetchAllPostsNotByCurrentUser();
     }
 
     public function createPost() {

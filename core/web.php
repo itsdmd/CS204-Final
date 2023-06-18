@@ -35,6 +35,11 @@ Router::get("posts", function () {
     include "views/posts.php";
 });
 
+Router::post("posts/view", function () {
+    $post = new PostCtrl();
+    $post->viewPost();
+});
+
 Router::get("posts/create", function () {
     $post = new PostCtrl();
     $post->viewCreatePostPage();
