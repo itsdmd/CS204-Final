@@ -6,8 +6,6 @@ class PostCtrl extends Controller {
     }
 
     public function viewPost() {
-        // $postctrl = new Post($this->conn);
-        // $post = $postctrl->fetchPostById($id);
         include "views/posts/view.php";
     }
 

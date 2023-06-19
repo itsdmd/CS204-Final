@@ -17,10 +17,10 @@ class Comment {
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function createComment($author, $type, $reply_to, $body) {
-        $sql = "INSERT INTO comments (author, type, reply_to, body) VALUES (?, ?, ?, ?)";
+    public function addComment($author, $type, $reply_to, $body) {
+        $sql = "INSERT INTO comment (author, type, reply_to, body) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bindParam("ssss", $author, $type, $reply_to, $body);
+        $stmt->bind_param("ssss", $author, $type, $reply_to, $body);
         $stmt->execute();
     }
 }

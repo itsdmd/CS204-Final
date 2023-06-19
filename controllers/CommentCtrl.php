@@ -5,9 +5,9 @@ class CommentCtrl extends Controller {
         parent::__construct();
     }
 
-    public function createComment($author, $type, $reply_to, $body) {
+    public function addComment($author, $type, $reply_to, $body) {
         $cmtmdl = new Comment($this->conn);
-        $cmtmdl->createComment($author, $type, $reply_to, $body);
+        $cmtmdl->addComment($author, $type, $reply_to, $body);
     }
 
     public function fetchAllCommentsByTargetId($type, $id) {
@@ -42,7 +42,7 @@ class CommentCtrl extends Controller {
 
     public function generateCommentSection() {
         $cmtctrl = new CommentCtrl();
-        foreach ($cmtctrl->fetchAllCommentsByTargetId(0, $_POST["post-id"]) as $comment) {
+        foreach ($cmtctrl->fetchAllCommentsByTargetId(0, $_GET["id"]) as $comment) {
             echo $cmtctrl->generateCommentChain($comment, 0);
         }
     }

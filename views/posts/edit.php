@@ -1,7 +1,11 @@
 <?php
-include "views/includes/header.php";
 $postctrl = new PostCtrl();
-$post = $postctrl->fetchPostById($_POST["post-id"]);
+if ($_SESSION["username"] != $postctrl->fetchPostById($_GET["id"])["author"]) {
+    exit();
+}
+
+include "views/includes/header.php";
+$post = $postctrl->fetchPostById($_GET["id"]);
 ?>
 
 <div class="container mt-5 p-5">

@@ -5,7 +5,7 @@
         <h1 class="display-4">404 page not found</h1>
         <p class="lead">You are lost</p>
         <hr class="my-4">
-        <p>return <a href="index.php">home</a></p>
+        <p>return <a href="<?= ROOT ?>">home</a></p>
     </div>
 </div>
 
