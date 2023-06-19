@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <a href="<?= ROOT ?>posts/create" class="btn btn-primary">Create new
+            <a href="<?= ROOT ?>posts/create" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Create new
                 post</a>
         </div>
     </div>
@@ -35,12 +35,14 @@
                             <td><?= $post["date_created"] ?></td>
                             <td>
                                 <div class="d-flex">
-                                    <form method="post" action="<?= ROOT ?>posts/edit" class="mr-2">
-                                        <button type="submit" name="post-id" value="<?= $post["id"] ?>" class="btn btn-warning">Edit</button>
-                                    </form>
+                                    <button class="btn btn-warning" type="button" onclick="location.href='<?php echo ROOT; ?>posts/edit/<?php echo $post['id']; ?>'">
+                                        <i class="fa-solid fa-pen"></i>
+                                        <b>Edit</b>
+                                    </button>
 
                                     <form method="post" action="<?= ROOT ?>posts/delete">
-                                        <button type="submit" name="post-id" value="<?= $post["id"] ?>" class="btn btn-danger">Delete</button>
+                                        <button type="submit" name="post-id" value="<?= $post["id"] ?>" class="btn btn-danger ml-1"><i class="fa-solid fa-trash"></i>
+                                            Delete</button>
                                     </form>
                                 </div>
                             </td>
@@ -56,7 +58,7 @@
 <div class="container p-5">
     <div class="row">
         <div class="col-12">
-            <a href="<?= ROOT ?>logout" class="btn btn-danger">Logout</a>
+            <a href="<?= ROOT ?>logout" class="btn btn-danger"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a>
         </div>
     </div>
 </div>

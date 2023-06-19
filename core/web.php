@@ -35,7 +35,7 @@ Router::get("posts", function () {
     include "views/posts.php";
 });
 
-Router::get("posts/view?id={id}", function () {
+Router::get("posts/view/{id}", function () {
     $post = new PostCtrl();
     $post->viewPost();
 });
@@ -51,12 +51,12 @@ Router::post("posts/create", function () {
     header("Location: " . ROOT . "profile");
 });
 
-Router::get("posts/edit?id={id}", function () {
+Router::get("posts/edit/{id}", function () {
     $post = new PostCtrl();
     $post->viewEditPostPage();
 });
 
-Router::post("posts/edit/submit", function () {
+Router::post("posts/edit", function () {
     $post = new PostCtrl();
     $post->editPost($_POST["post-id"]);
     header("Location: " . ROOT . "profile");
@@ -72,7 +72,7 @@ Router::post("comments/add", function () {
     $comment = new CommentCtrl();
     $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["body"]);
 
-    header("Location: " . ROOT . "posts/view?id=" . $_POST["post-id"]);
+    header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
 if (Router::$found === false) {

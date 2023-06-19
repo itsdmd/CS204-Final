@@ -34,7 +34,7 @@
                                             }
                                             echo $body;
                                             ?></p>
-                    <button class="btn btn-primary" type="button" onclick="location.href='<?php echo ROOT; ?>posts/view?id=<?php echo $post['id']; ?>'">
+                    <button class="btn btn-primary" type="button" onclick="location.href='<?php echo ROOT; ?>posts/view/<?php echo $post['id']; ?>'">
                         <i class="fa-solid fa-eye"></i>
                         <b>Read</b>
                     </button>

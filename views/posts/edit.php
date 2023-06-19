@@ -1,11 +1,13 @@
 <?php
 $postctrl = new PostCtrl();
-if ($_SESSION["username"] != $postctrl->fetchPostById($_GET["id"])["author"]) {
+$url_exploded = explode("/", $_GET["url"]);
+if ($_SESSION["username"] != $postctrl->fetchPostById(end($url_exploded))["author"]) {
+    header("Location: " . ROOT . "posts/view/" . end($url_exploded));
     exit();
 }
 
 include "views/includes/header.php";
-$post = $postctrl->fetchPostById($_GET["id"]);
+$post = $postctrl->fetchPostById(end($url_exploded));
 ?>
 
 <div class="container mt-5 p-5">
@@ -17,7 +19,7 @@ $post = $postctrl->fetchPostById($_GET["id"]);
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="<?php echo ROOT; ?>posts/edit/submit" method="post">
+            <form action="<?php echo ROOT; ?>posts/edit" method="post">
                 <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
                 <div class="form-group">
                     <label for="post-title">Title</label>

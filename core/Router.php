@@ -14,6 +14,7 @@ class Router {
             self::$url = "";
         }
 
+
         if (stripos(self::$route, "{") !== false) {
             $routeArr = explode("/", self::$route);
             $urlArr = explode("/", self::$url);

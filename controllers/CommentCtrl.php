@@ -42,7 +42,8 @@ class CommentCtrl extends Controller {
 
     public function generateCommentSection() {
         $cmtctrl = new CommentCtrl();
-        foreach ($cmtctrl->fetchAllCommentsByTargetId(0, $_GET["id"]) as $comment) {
+        $url_exploded = explode("/", $_GET["url"]);
+        foreach ($cmtctrl->fetchAllCommentsByTargetId(0, end($url_exploded)) as $comment) {
             echo $cmtctrl->generateCommentChain($comment, 0);
         }
     }

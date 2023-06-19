@@ -1,7 +1,8 @@
 <?php
 include "views/includes/header.php";
 $postctrl = new PostCtrl();
-$post = $postctrl->fetchPostById($_GET["id"]);
+$url_exploded = explode("/", $_GET["url"]);
+$post = $postctrl->fetchPostById(end($url_exploded));
 ?>
 
 <div class="container mt-5 p-5">
@@ -33,8 +34,10 @@ $post = $postctrl->fetchPostById($_GET["id"]);
     </div>
     <div class="row">
         <div class="col-12 d-flex justify-content-end">
-            <a href="<?= ROOT ?>" class="btn btn-warning mr-1">Return</a>
-            <button id="report-btn" class="btn btn-danger">Report</button>
+            <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i
+                    class="fa-solid fa-arrow-left"></i> Return</a>
+            <button id="report-btn" class="btn btn-danger"><i
+                    class="fa-solid fa-flag"></i> Report</button>
         </div>
     </div>
 
@@ -48,13 +51,19 @@ $post = $postctrl->fetchPostById($_GET["id"]);
         <!-- comment form -->
         <div class="col-12">
             <div class="mb-3 d-flex flex-column">
-                <form action="<?= ROOT ?>comments/add" method="POST" id="comment-form">
-                    <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
-                    <input type="hidden" name="author" value="<?= $_SESSION["username"] ?>">
+                <form action="<?= ROOT ?>comments/add" method="POST"
+                    id="comment-form">
+                    <input type="hidden" name="post-id"
+                        value="<?= $post["id"] ?>">
+                    <input type="hidden" name="author"
+                        value="<?= $_SESSION["username"] ?>">
                     <input type="hidden" name="type" value="0">
-                    <input type="hidden" name="reply_to" value="<?= $post["id"] ?>">
-                    <input name="body" class="form-control mb-3" placeholder="Write a comment...">
-                    <button type="submit" class="btn btn-primary">Comment</button>
+                    <input type="hidden" name="reply_to"
+                        value="<?= $post["id"] ?>">
+                    <input name="body" class="form-control mb-3"
+                        placeholder="Write a comment...">
+                    <button type="submit"
+                        class="btn btn-primary">Comment</button>
                 </form>
             </div>
         </div>
