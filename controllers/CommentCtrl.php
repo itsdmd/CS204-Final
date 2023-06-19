@@ -30,6 +30,23 @@ class CommentCtrl extends Controller {
         $html .= "<p><b>" . $comment["author"] . "</b> <i class='text-secondary'>said:</i></p>";
         $html .= "<p>" . $comment["body"] . "</p>";
         $html .= "<p class='text-secondary'><i>on</i> " . $comment["date_created"] . "</p>";
+
+        // reply form
+        $exploded_url = explode("/", $_GET["url"]);
+        $current_post_id = end($exploded_url);
+        $html .= "<div class='mb-3 d-flex flex-column'>";
+        $html .= "<form action='" . ROOT . "comments/add' method='POST' id='comment-form'>";
+        $html .= "<input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+        $html .= "<input type='hidden' name='author' value='" . $_SESSION["username"] . "'>";
+        $html .= "<input type='hidden' name='type' value='1'>";
+        $html .= "<input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
+        $html .= "<input name='body' class='form-control mb-3' placeholder='Write a reply...'>";
+        $html .= "<div class='col-12 d-flex justify-content-end'>";
+        $html .= "<button type='submit' class='btn btn-primary'>Submit</button>";
+        $html .= "</div>";
+        $html .= "</form>";
+        $html .= "</div>";
+
         $html .= "<hr>";
         $html .= "</div>";
 
