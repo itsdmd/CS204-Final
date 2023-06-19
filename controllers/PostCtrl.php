@@ -62,4 +62,9 @@ class PostCtrl extends Controller {
         $post = new Post($this->conn);
         $post->deletePost($id);
     }
+
+    public function reportPost($id) {
+        $rptctrl = new Report($this->conn);
+        $rptctrl->addReport(0, $id, $_SESSION["username"]);
+    }
 }

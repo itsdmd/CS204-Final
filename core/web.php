@@ -68,9 +68,22 @@ Router::post("posts/delete", function () {
     header("Location: " . ROOT . "profile");
 });
 
+Router::post("posts/report", function () {
+    $post = new PostCtrl();
+    $post->reportPost($_POST["post-id"]);
+    header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
+});
+
 Router::post("comments/add", function () {
     $comment = new CommentCtrl();
     $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["body"]);
+
+    header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
+});
+
+Router::post("comments/report", function () {
+    $comment = new CommentCtrl();
+    $comment->reportComment($_POST["comment-id"], $_SESSION["username"]);
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });

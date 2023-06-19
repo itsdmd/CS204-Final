@@ -10,6 +10,11 @@ class CommentCtrl extends Controller {
         $cmtmdl->addComment($author, $type, $reply_to, $body);
     }
 
+    public function reportComment($target_id, $reporter) {
+        $rptctrl = new ReportCtrl();
+        $rptctrl->addReport(1, $target_id, $reporter);
+    }
+
     public function fetchAllCommentsByTargetId($type, $id) {
         $cmtmdl = new Comment($this->conn);
         return $cmtmdl->fetchAllCommentsByTargetId($type, $id);
@@ -42,9 +47,16 @@ class CommentCtrl extends Controller {
         $html .= "<input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
         $html .= "<input name='body' class='form-control mb-3' placeholder='Write a reply...'>";
         $html .= "<div class='col-12 d-flex justify-content-end'>";
-        $html .= "<button type='submit' class='btn btn-primary'>Submit</button>";
-        $html .= "</div>";
+        $html .= "<div class='d-flex'>";
+        $html .= "<button type='submit' class='btn btn-primary mr-1'><i class='fa-solid fa-paper-plane'></i></button>";
         $html .= "</form>";
+        $html .= "<form action='" . ROOT . "comments/report' method='POST'>";
+        $html .= "<input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+        $html .= "<input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
+        $html .= "<button type='submit' class='btn btn-danger'><i class='fa-solid fa-flag'></i></button>";
+        $html .= "</form>";
+        $html .= "</div>";
+        $html .= "</div>";
         $html .= "</div>";
 
         $html .= "<hr>";

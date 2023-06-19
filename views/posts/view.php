@@ -15,7 +15,9 @@ $post = $postctrl->fetchPostById(end($url_exploded));
             <p class="text-secondary">
                 <i>by</i>
                 <b><?= $post["author"] ?></b>
-                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;
+                |
+                &nbsp;&nbsp;
                 <i>on</i>
                 <?= $post["date_created"] ?>
             </p>
@@ -35,7 +37,11 @@ $post = $postctrl->fetchPostById(end($url_exploded));
     <div class="row">
         <div class="col-12 d-flex justify-content-end">
             <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i class="fa-solid fa-arrow-left"></i> Return</a>
-            <button id="report-btn" class="btn btn-danger"><i class="fa-solid fa-flag"></i> Report</button>
+            <!-- report button -->
+            <form action="<?= ROOT ?>posts/report" method="POST">
+                <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
+                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-flag"></i> Report</button>
+            </form>
         </div>
     </div>
 
@@ -57,7 +63,8 @@ $post = $postctrl->fetchPostById(end($url_exploded));
                     <input name="body" class="form-control mb-3" placeholder="Write a comment...">
 
                     <div class="col-12 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <button type="submit" class="btn btn-primary"><i class='fa-solid fa-paper-plane'></i>
+                            Submit</button>
                     </div>
                 </form>
             </div>
