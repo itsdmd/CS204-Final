@@ -13,12 +13,9 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
         <div class="container">
-            <a class="navbar-brand"><i class="fas fa-icons"></i> Bludist</a>
+            <a class="navbar-brand" href="<?php echo ROOT; ?>"><i class="fas fa-icons"></i> Bludist</a>
             <div id="my-nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="<?php echo ROOT; ?>"><i class="fas fa-home"></i> Home</a>
-                    </li>
                     <?php if (isset($_SESSION['username'])) : ?>
                         <li class="nav-item dropdown active">
                             <a class="nav-link" href="<?php echo ROOT; ?>profile"><i class="fas fa-user"></i>

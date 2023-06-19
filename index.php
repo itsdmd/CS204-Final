@@ -9,8 +9,12 @@ DB::connect();
 foreach (glob("models/*.php") as $filename) {
     include $filename;
 }
+
+include "controllers/Controller.php";
 foreach (glob("controllers/*.php") as $filename) {
-    include $filename;
+    if ($filename != "controllers/Controller.php") {
+        include $filename;
+    }
 }
 
 session_start();

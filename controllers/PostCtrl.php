@@ -8,15 +8,15 @@ class PostCtrl extends Controller {
     public function viewPost() {
         // $postctrl = new Post($this->conn);
         // $post = $postctrl->fetchPostById($id);
-        include "views/viewPost.php";
+        include "views/posts/view.php";
     }
 
     public function viewCreatePostPage() {
-        include "views/createPost.php";
+        include "views/posts/create.php";
     }
 
     public function viewEditPostPage() {
-        include "views/editPost.php";
+        include "views/posts/edit.php";
     }
 
     public function fetchPostById($id) {
