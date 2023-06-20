@@ -82,6 +82,12 @@ Router::post("posts/report", function () {
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
+Router::post("posts/voting", function () {
+    $post = new VotingCtrl();
+    $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+    header("Location: " . ROOT . "posts/view/" . $_POST["target-id"]);
+});
+
 Router::post("comments/add", function () {
     $comment = new CommentCtrl();
     $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["body"]);

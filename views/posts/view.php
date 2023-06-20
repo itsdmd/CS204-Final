@@ -1,8 +1,12 @@
 <?php
 include "views/includes/header.php";
+
 $postctrl = new PostCtrl();
 $url_exploded = explode("/", $_GET["url"]);
 $post = $postctrl->fetchPostById(end($url_exploded));
+
+$votingctrl = new VotingCtrl();
+$vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
 ?>
 
 <div class="container mt-5 p-5">
@@ -35,13 +39,35 @@ $post = $postctrl->fetchPostById(end($url_exploded));
         </div>
     </div>
     <div class="row">
-        <div class="col-12 d-flex justify-content-end">
-            <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i class="fa-solid fa-arrow-left"></i> Return</a>
-            <!-- report button -->
-            <form action="<?= ROOT ?>posts/report" method="POST">
-                <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
-                <button type="submit" class="btn btn-danger"><i class="fa-solid fa-flag"></i> Report</button>
-            </form>
+        <div class="col-12 d-flex justify-content-between align-items-center">
+            <div class="d-flex gap-1">
+                <b>
+                    <p class="<?= ($vote_count > 0) ? "text-bg-success" : "text-bg-danger" ?> mr-4">
+                        <?= $vote_count ?> votes</p>
+                </b>
+                <!-- voting buttons -->
+                <form action="<?= ROOT ?>posts/voting" method="POST">
+                    <input type="hidden" name="target-id" value="<?= $post["id"] ?>">
+                    <input type="hidden" name="target-type" value="0">
+                    <input type="hidden" name="voter" value="<?= $_SESSION["username"] ?>">
+                    <input type="hidden" name="is-upvote" value="1">
+                    <button type="submit" class="btn btn-success mr-1"><i class="fa-solid fa-arrow-up"></i></button>
+                </form>
+                <form action="<?= ROOT ?>posts/voting" method="POST">
+                    <input type="hidden" name="target-id" value="<?= $post["id"] ?>">
+                    <input type="hidden" name="target-type" value="0">
+                    <input type="hidden" name="voter" value="<?= $_SESSION["username"] ?>">
+                    <input type="hidden" name="is-upvote" value="0">
+                    <button type="submit" class="btn btn-danger mr-1"><i class="fa-solid fa-arrow-down"></i></button>
+                </form>
+            </div>
+            <div class="d-flex gap-1">
+                <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i class="fa-solid fa-arrow-left"></i> Return</a>
+                <form action="<?= ROOT ?>posts/report" method="POST">
+                    <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
+                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-flag"></i> Report</button>
+                </form>
+            </div>
         </div>
     </div>
 
