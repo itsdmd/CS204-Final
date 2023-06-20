@@ -63,7 +63,7 @@ $post = $postctrl->fetchPostById(end($url_exploded));
                     <input name="body" class="form-control mb-3" placeholder="Write a comment...">
 
                     <div class="col-12 d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary"><i class='fa-solid fa-paper-plane'></i>
+                        <button type="submit" class="btn btn-info"><i class='fa-solid fa-paper-plane'></i>
                             Submit</button>
                     </div>
                 </form>

@@ -6,24 +6,32 @@ Router::get("", function () {
     $home->index();
 });
 
-Router::get("account", function () {
+Router::get("login", function () {
     $user = new UserCtrl();
     $user->viewLoginPage();
 });
 
-Router::post("account", function () {
+Router::post("login", function () {
+    if (isset($_SESSION["status"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $user = new UserCtrl();
     $user->userLogin();
 });
 
 Router::post("register", function () {
     $user = new UserCtrl();
-    $user->userRegister();
+    $_SESSION = array();
+    $_SESSION["status"] = $user->userRegister();
+
+    header("Location: " . ROOT . "login");
 });
 
 Router::get("profile", function () {
     $profile = new ProfileCtrl();
-    $profile->index();
+    $profile->viewProfilePage();
 });
 
 Router::get("logout", function () {

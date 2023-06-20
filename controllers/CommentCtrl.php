@@ -48,7 +48,7 @@ class CommentCtrl extends Controller {
         $html .= "<input name='body' class='form-control mb-3' placeholder='Write a reply...'>";
         $html .= "<div class='col-12 d-flex justify-content-end'>";
         $html .= "<div class='d-flex'>";
-        $html .= "<button type='submit' class='btn btn-primary mr-1'><i class='fa-solid fa-paper-plane'></i></button>";
+        $html .= "<button type='submit' class='btn btn-info mr-1'><i class='fa-solid fa-paper-plane'></i></button>";
         $html .= "</form>";
         $html .= "<form action='" . ROOT . "comments/report' method='POST'>";
         $html .= "<input type='hidden' name='post-id' value='" . $current_post_id . "'>";

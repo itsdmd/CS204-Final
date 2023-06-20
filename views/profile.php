@@ -1,4 +1,7 @@
-<?php include "views/includes/header.php"; ?>
+<?php
+include "views/includes/header.php";
+
+?>
 
 <div class="container mt-5 p-5">
     <div class="row">
@@ -9,7 +12,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <a href="<?= ROOT ?>posts/create" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Create new
+            <a href="<?= ROOT ?>posts/create" class="btn btn-info"><i class="fa-solid fa-plus"></i> Create new
                 post</a>
         </div>
     </div>
@@ -35,7 +38,7 @@
                             <td><?= $post["date_created"] ?></td>
                             <td>
                                 <div class="d-flex">
-                                    <button class="btn btn-warning" type="button" onclick="location.href='<?php echo ROOT; ?>posts/edit/<?php echo $post['id']; ?>'">
+                                    <button class="btn btn-warning" type="button" onclick="location.href='<?= ROOT; ?>posts/edit/<?= $post['id']; ?>'">
                                         <i class="fa-solid fa-pen"></i>
                                         <b>Edit</b>
                                     </button>

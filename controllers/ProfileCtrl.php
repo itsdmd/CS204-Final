@@ -5,7 +5,7 @@ class ProfileCtrl extends Controller {
         parent::__construct();
     }
 
-    public function index() {
+    public function viewProfilePage() {
         include "views/profile.php";
     }
 }

@@ -9,7 +9,7 @@
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="<?php echo ROOT; ?>posts/create" method="post">
+            <form action="<?= ROOT; ?>posts/create" method="post">
                 <div class="form-group">
                     <label for="post-title">Title</label>
                     <input type="text" class="form-control" id="post-title" name="post-title" placeholder="Enter post title">
@@ -22,7 +22,7 @@
                     <label for="post-tags">Tags</label>
                     <input type="text" class="form-control" id="post-tags" name="post-tags" placeholder="Enter post tags (eg. 'science,math,physics')">
                 </div>
-                <button type="submit" class="btn btn-primary">Post</button>
+                <button type="submit" class="btn btn-info">Post</button>
             </form>
         </div>
     </div>

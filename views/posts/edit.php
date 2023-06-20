@@ -19,7 +19,7 @@ $post = $postctrl->fetchPostById(end($url_exploded));
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="<?php echo ROOT; ?>posts/edit" method="post">
+            <form action="<?= ROOT; ?>posts/edit" method="post">
                 <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
                 <div class="form-group">
                     <label for="post-title">Title</label>
@@ -33,7 +33,7 @@ $post = $postctrl->fetchPostById(end($url_exploded));
                     <label for="post-tags">Tags</label>
                     <input type="text" class="form-control" id="post-tags" name="post-tags" placeholder="Enter post tags (eg. 'science,math,physics')" value="<?= $post["tags"] ?>">
                 </div>
-                <button type="submit" class="btn btn-primary">Update</button>
+                <button type="submit" class="btn btn-info">Update</button>
             </form>
         </div>
     </div>
