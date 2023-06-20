@@ -34,8 +34,18 @@ $vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
     </div>
     <div class="row">
         <div class="col-12">
-            <p class="text-secondary"><b>Tags:</b> <?= $post["tags"] ?></p>
-            <hr>
+            <p class="text-secondary"><b>Tags:</b>
+                <?php
+                $tags = explode(",", $post["tags"]);
+                foreach ($tags as $key => $tag) {
+                    $tags[$key] = trim($tag);
+                }
+                foreach ($tags as $tag) : ?>
+            <div class="badge bg-info text-light"><?= $tag ?></div>
+        <?php endforeach; ?>
+
+        </p>
+        <hr>
         </div>
     </div>
     <div class="row">
@@ -65,7 +75,7 @@ $vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
                 <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i class="fa-solid fa-arrow-left"></i> Return</a>
                 <form action="<?= ROOT ?>posts/report" method="POST">
                     <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
-                    <button type="submit" class="btn btn-danger"><i class="fa-solid fa-flag"></i> Report</button>
+                    <button type="submit" class="btn btn-dark"><i class="fa-solid fa-flag"></i> Report</button>
                 </form>
             </div>
         </div>
