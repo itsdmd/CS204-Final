@@ -102,6 +102,12 @@ Router::post("comments/report", function () {
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
+Router::post("comments/voting", function () {
+    $post = new VotingCtrl();
+    $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+    header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
+});
+
 if (Router::$found === false) {
     include "views/_404.php";
 }
