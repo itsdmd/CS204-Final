@@ -60,7 +60,7 @@ class CommentCtrl extends Controller {
 
         // voting count
         $votectrl = new VotingCtrl();
-        $vote_count = $votectrl->countVotesByTargetTypeAndId(1, $comment["id"]);
+        $vote_count = $votectrl->votingScore(1, $comment["id"]);
         $html .= "  <p class='text-secondary'><b>" . $vote_count . "</b> votes</p>";
 
         // voting buttons

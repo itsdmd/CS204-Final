@@ -15,8 +15,8 @@ class VotingCtrl extends Controller {
         return $voting->voteExisted($target_type, $target_id, $voter, $is_upvote);
     }
 
-    public function countVotesByTargetTypeAndId($target_type, $target_id) {
+    public function votingScore($target_type, $target_id) {
         $voting = new Voting($this->conn);
-        return $voting->countVotesByTargetTypeAndId($target_type, $target_id);
+        return $voting->votingScore($target_type, $target_id);
     }
 }

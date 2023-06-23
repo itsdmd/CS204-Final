@@ -6,7 +6,7 @@ $url_exploded = explode("/", $_GET["url"]);
 $post = $postctrl->fetchPostById(end($url_exploded));
 
 $votingctrl = new VotingCtrl();
-$vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
+$vote_count = $votingctrl->votingScore(0, $post["id"]);
 ?>
 
 <div class="container mt-5 p-5">

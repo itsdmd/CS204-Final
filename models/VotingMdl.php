@@ -41,7 +41,7 @@ class Voting {
         return $result->num_rows > 0;
     }
 
-    public function countVotesByTargetTypeAndId($target_type, $target_id) {
+    public function votingScore($target_type, $target_id) {
         $sql_upvotes = "SELECT COUNT(*) AS upvotes FROM voting WHERE target_type = ? AND target_id = ? AND is_upvote = 1";
         $stmt_upvotes = $this->conn->prepare($sql_upvotes);
         $stmt_upvotes->bind_param("ii", $target_type, $target_id);

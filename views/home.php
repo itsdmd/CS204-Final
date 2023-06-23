@@ -24,54 +24,53 @@
                     <div class="input-group-append">
                         <button class="btn btn-outline-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
                     </div>
+                </form>
             </div>
-            </form>
         </div>
-    </div>
 
-    <!-- Fetch all posts and show them as cards -->
-    <?php
-    $postsctrl = new PostCtrl();
-    $posts = null;
+        <!-- Fetch all posts and show them as cards -->
+        <?php
+        $postsctrl = new PostCtrl();
+        $posts = null;
 
-    if (isset($_POST["ids"]) && is_array($_POST["ids"]) && count($_POST["ids"]) > 0) {
-        foreach ($_POST["ids"] as $id) {
-            $posts[] = $postsctrl->fetchPostById($id);
+        if (isset($_POST["ids"]) && is_array($_POST["ids"]) && count($_POST["ids"]) > 0) {
+            foreach ($_POST["ids"] as $id) {
+                $posts[] = $postsctrl->fetchPostById($id);
+            }
+        } else {
+            $posts = $postsctrl->fetchAllPostsNotByCurrentUser();
         }
-    } else {
-        $posts = $postsctrl->fetchAllPostsNotByCurrentUser();
-    }
 
-    foreach ($posts as $post) : ?>
+        foreach ($posts as $post) : ?>
 
-        <div class="card m-4">
-            <div class="card-body">
-                <h5 class="card-title"><?= $post['title']; ?></h5>
-                <h6 class="card-subtitle mb-2 text-muted">
-                    <i>by </i><b><?= $post['author']; ?></b>
-                    &nbsp;&nbsp;
-                    |
-                    &nbsp;&nbsp;
-                    <i>on </i>
-                    <?= $post['date_created']; ?>
-                </h6>
-                <hr>
-                <p class="card-text"><?php
-                                        // show only first 100 characters of the post content
-                                        $content = $post['content'];
-                                        if (strlen($content) > 100) {
-                                            $content = substr($content, 0, 100) . "...";
-                                        }
-                                        echo $content;
-                                        ?></p>
-                <button class="btn btn-info" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
-                    <i class="fa-solid fa-eye"></i>
-                    <b>Read</b>
-                </button>
+            <div class="card m-4">
+                <div class="card-body">
+                    <h5 class="card-title"><?= $post['title']; ?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">
+                        <i>by </i><b><?= $post['author']; ?></b>
+                        &nbsp;&nbsp;
+                        |
+                        &nbsp;&nbsp;
+                        <i>on </i>
+                        <?= $post['date_created']; ?>
+                    </h6>
+                    <hr>
+                    <p class="card-text"><?php
+                                            // show only first 100 characters of the post content
+                                            $content = $post['content'];
+                                            if (strlen($content) > 100) {
+                                                $content = substr($content, 0, 100) . "...";
+                                            }
+                                            echo $content;
+                                            ?></p>
+                    <button class="btn btn-info" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
+                        <i class="fa-solid fa-eye"></i>
+                        <b>Read</b>
+                    </button>
+                </div>
             </div>
-        </div>
 
-    <?php endforeach; ?>
+        <?php endforeach; ?>
     </div>
 
 <?php else : ?>
