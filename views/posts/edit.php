@@ -26,8 +26,8 @@ $post = $postctrl->fetchPostById(end($url_exploded));
                     <input type="text" class="form-control" id="post-title" name="post-title" placeholder="Enter post title" value="<?= $post["title"] ?>">
                 </div>
                 <div class="form-group">
-                    <label for="post-body">Body</label>
-                    <textarea class="form-control" id="post-body" name="post-body" rows="5" placeholder="Enter post body"><?= $post["body"] ?></textarea>
+                    <label for="post-content">content</label>
+                    <textarea class="form-control" id="post-content" name="post-content" rows="5" placeholder="Enter post content"><?= $post["content"] ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="post-tags">Tags</label>

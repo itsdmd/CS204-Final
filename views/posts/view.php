@@ -29,7 +29,7 @@ $vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
     </div>
     <div class="row mt-5 mb-5">
         <div class="col-12">
-            <p><?= $post["body"] ?></p>
+            <p><?= $post["content"] ?></p>
         </div>
     </div>
     <div class="row">
@@ -96,7 +96,7 @@ $vote_count = $votingctrl->countVotesByTargetTypeAndId(0, $post["id"]);
                     <input type="hidden" name="author" value="<?= $_SESSION["username"] ?>">
                     <input type="hidden" name="type" value="0">
                     <input type="hidden" name="reply_to" value="<?= $post["id"] ?>">
-                    <input name="body" class="form-control mb-3" placeholder="Write a comment...">
+                    <input name="content" class="form-control mb-3" placeholder="Write a comment...">
 
                     <div class="col-12 d-flex justify-content-end">
                         <button type="submit" class="btn btn-info"><i class='fa-solid fa-paper-plane'></i>

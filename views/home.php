@@ -57,12 +57,12 @@
                 </h6>
                 <hr>
                 <p class="card-text"><?php
-                                        // show only first 100 characters of the post body
-                                        $body = $post['body'];
-                                        if (strlen($body) > 100) {
-                                            $body = substr($body, 0, 100) . "...";
+                                        // show only first 100 characters of the post content
+                                        $content = $post['content'];
+                                        if (strlen($content) > 100) {
+                                            $content = substr($content, 0, 100) . "...";
                                         }
-                                        echo $body;
+                                        echo $content;
                                         ?></p>
                 <button class="btn btn-info" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
                     <i class="fa-solid fa-eye"></i>

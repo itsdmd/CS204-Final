@@ -46,21 +46,21 @@ class PostCtrl extends Controller {
         $post = new Post($this->conn);
 
         $title = $_POST["post-title"];
-        $body = $_POST["post-body"];
+        $content = $_POST["post-content"];
         $author = $_SESSION["username"];
         $tags = $_POST["post-tags"];
 
-        $post->createPost($title, $body, $author, $tags);
+        $post->createPost($title, $content, $author, $tags);
     }
 
     public function editPost($id) {
         $post = new Post($this->conn);
 
         $title = $_POST["post-title"];
-        $body = $_POST["post-body"];
+        $content = $_POST["post-content"];
         $tags = $_POST["post-tags"];
 
-        $post->editPost($id, $title, $body, $tags);
+        $post->editPost($id, $title, $content, $tags);
     }
 
     public function deletePost($id) {

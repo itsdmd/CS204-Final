@@ -112,7 +112,7 @@ Router::get("posts/search", function () {
 
 Router::post("comments/add", function () {
     $comment = new CommentCtrl();
-    $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["body"]);
+    $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["content"]);
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });

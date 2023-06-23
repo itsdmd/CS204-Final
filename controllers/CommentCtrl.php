@@ -5,9 +5,9 @@ class CommentCtrl extends Controller {
         parent::__construct();
     }
 
-    public function addComment($author, $type, $reply_to, $body) {
+    public function addComment($author, $type, $reply_to, $content) {
         $cmtmdl = new Comment($this->conn);
-        $cmtmdl->addComment($author, $type, $reply_to, $body);
+        $cmtmdl->addComment($author, $type, $reply_to, $content);
     }
 
     public function reportComment($target_id, $reporter) {
@@ -33,7 +33,7 @@ class CommentCtrl extends Controller {
         $html .= "'>";
 
         $html .= "  <p><b>" . $comment["author"] . "</b> <i class='text-secondary'>said:</i></p>";
-        $html .= "  <p>" . $comment["body"] . "</p>";
+        $html .= "  <p>" . $comment["content"] . "</p>";
         $html .= "  <p class='text-secondary'><i>on</i> " . $comment["date_created"] . "</p>";
 
         // reply form
@@ -45,7 +45,7 @@ class CommentCtrl extends Controller {
         $html .= "          <input type='hidden' name='author' value='" . $_SESSION["username"] . "'>";
         $html .= "          <input type='hidden' name='type' value='1'>";
         $html .= "          <input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
-        $html .= "          <input name='body' class='form-control' placeholder='Write a reply...'>";
+        $html .= "          <input name='content' class='form-control' placeholder='Write a reply...'>";
 
         // submit reply button
         $html .= "          <button type='submit' class='btn btn-info ml-2'><i class='fa-solid fa-paper-plane'></i></button>";

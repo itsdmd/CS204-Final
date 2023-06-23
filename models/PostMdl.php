@@ -56,17 +56,17 @@ class Post {
         return $results->fetch_all(MYSQLI_ASSOC);
     }
 
-    public function createPost($title, $body, $author, $tags) {
-        $sql = "INSERT INTO post (title, body, author, tags) VALUES (?, ?, ?, ?)";
+    public function createPost($title, $content, $author, $tags) {
+        $sql = "INSERT INTO post (title, content, author, tags) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssss", $title, $body, $author, $tags);
+        $stmt->bind_param("ssss", $title, $content, $author, $tags);
         $stmt->execute();
     }
 
-    public function editPost($id, $title, $body, $tags) {
-        $sql = "UPDATE post SET title = ?, body = ?, tags = ? WHERE id = ?";
+    public function editPost($id, $title, $content, $tags) {
+        $sql = "UPDATE post SET title = ?, content = ?, tags = ? WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ssss", $title, $body, $tags, $id);
+        $stmt->bind_param("ssss", $title, $content, $tags, $id);
         $stmt->execute();
     }
 
