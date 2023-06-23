@@ -37,6 +37,11 @@ class PostCtrl extends Controller {
         return $postctrl->fetchAllPostsNotByCurrentUser();
     }
 
+    public function searchPosts($type, $needle) {
+        $postctrl = new Post($this->conn);
+        return $postctrl->fetchPostsByMatched($type, $needle);
+    }
+
     public function createPost() {
         $post = new Post($this->conn);
 

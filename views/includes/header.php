@@ -16,7 +16,9 @@
             <a class="navbar-brand" href="<?= ROOT; ?>"><i class="fas fa-icons"></i> Bludist</a>
             <div id="my-nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
-                    <?php if (isset($_SESSION['username'])) : ?>
+                    <?php
+                    if (isset($_SESSION['username'])) :
+                    ?>
                         <li class="nav-item dropdown active">
                             <a class="nav-link" href="<?= ROOT; ?>profile"><i class="fas fa-user"></i>
                                 <?= $_SESSION['username']; ?></a>
@@ -25,7 +27,10 @@
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= ROOT; ?>login"><i class="fas fa-user"></i> Login</a>
                         </li>
-                    <?php endif; ?>
+                    <?php
+                        header("Location: " . ROOT . "logout");
+                    endif;
+                    ?>
                 </ul>
             </div>
         </div>

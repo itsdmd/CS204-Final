@@ -40,7 +40,7 @@ Router::get("logout", function () {
 });
 
 Router::get("posts", function () {
-    include "views/posts.php";
+    header("Location: " . ROOT);
 });
 
 Router::get("posts/view/{id}", function () {
@@ -86,6 +86,28 @@ Router::post("posts/voting", function () {
     $post = new VotingCtrl();
     $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
     header("Location: " . ROOT . "posts/view/" . $_POST["target-id"]);
+});
+
+Router::get("posts/search", function () {
+    if ((!isset($_GET["type"]) || !isset($_GET["needle"])) || ($_GET["type"] == "" || $_GET["needle"] == "")) {
+        header("Location: " . ROOT);
+        exit();
+    }
+
+    $postctrl = new PostCtrl();
+    $posts = $postctrl->searchPosts($_GET["type"], $_GET["needle"]);
+
+    // get id of all posts
+    $ids = array();
+    foreach ($posts as $post) {
+        array_push($ids, $post["id"]);
+    }
+
+    // attach to $_POST
+    $_POST["ids"] = $ids;
+
+    $home = new HomeCtrl();
+    $home->index();
 });
 
 Router::post("comments/add", function () {
