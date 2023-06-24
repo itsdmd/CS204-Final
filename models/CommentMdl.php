@@ -13,8 +13,10 @@ class Comment {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $id, $type);
         $stmt->execute();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(1, $results);
     }
 
     public function addComment($author, $type, $reply_to, $content) {
@@ -22,5 +24,10 @@ class Comment {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssss", $author, $type, $reply_to, $content);
         $stmt->execute();
+    }
+
+    public function deleteComment($comment_id, $deleter) {
+        $deleteCtrl = new DeletedCtrl();
+        $deleteCtrl->deleteComment($comment_id, $deleter);
     }
 }

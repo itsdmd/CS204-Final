@@ -8,6 +8,11 @@ class Post {
     }
 
     public function fetchPostById($id) {
+        $deletedCtrl = new DeletedCtrl();
+        if ($deletedCtrl->itemIsDeleted(0, $id)) {
+            return [];
+        }
+
         $sql = "SELECT * FROM post WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $id);
@@ -21,9 +26,10 @@ class Post {
         $sql = "SELECT * FROM post";
         $stmt = $this->conn->prepare($sql);
         $stmt->execute();
-        $results = $stmt->get_result();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        return $results->fetch_all(MYSQLI_ASSOC);
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
     public function fetchAllPostsByCurrentUser() {
@@ -31,9 +37,10 @@ class Post {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $_SESSION["username"]);
         $stmt->execute();
-        $results = $stmt->get_result();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        return $results->fetch_all(MYSQLI_ASSOC);
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
     public function fetchAllPostsNotByCurrentUser() {
@@ -41,9 +48,10 @@ class Post {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $_SESSION["username"]);
         $stmt->execute();
-        $results = $stmt->get_result();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        return $results->fetch_all(MYSQLI_ASSOC);
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
     public function fetchPostsByMatched($type, $needle) {
@@ -51,9 +59,10 @@ class Post {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $_SESSION["username"]);
         $stmt->execute();
-        $results = $stmt->get_result();
+        $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
-        return $results->fetch_all(MYSQLI_ASSOC);
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
     public function createPost($title, $content, $author, $tags) {
@@ -71,9 +80,7 @@ class Post {
     }
 
     public function deletePost($id) {
-        $sql = "DELETE FROM post WHERE id = ? AND author = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $id, $_SESSION["username"]);
-        $stmt->execute();
+        $deleteCtrl = new DeletedCtrl();
+        $deleteCtrl->deletePost($id, $_SESSION["username"]);
     }
 }

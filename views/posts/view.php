@@ -1,12 +1,12 @@
 <?php
 include "views/includes/header.php";
 
-$postctrl = new PostCtrl();
+$postCtrl = new PostCtrl();
 $url_exploded = explode("/", $_GET["url"]);
-$post = $postctrl->fetchPostById(end($url_exploded));
+$post = $postCtrl->fetchPostById(end($url_exploded));
 
-$votingctrl = new VotingCtrl();
-$vote_count = $votingctrl->votingScore(0, $post["id"]);
+$votingCtrl = new VotingCtrl();
+$vote_count = $votingCtrl->votingScore(0, $post["id"]);
 ?>
 
 <div class="container mt-5 p-5">
@@ -71,12 +71,22 @@ $vote_count = $votingctrl->votingScore(0, $post["id"]);
                     <button type="submit" class="btn btn-danger mr-1"><i class="fa-solid fa-arrow-down"></i></button>
                 </form>
             </div>
-            <div class="d-flex gap-1">
+            <div class="d-flex">
                 <a href="<?= ROOT ?>" class="btn btn-warning mr-1"><i class="fa-solid fa-arrow-left"></i> Return</a>
-                <form action="<?= ROOT ?>posts/report" method="POST">
+                <form action="<?= ROOT ?>posts/report" method="POST" class="mr-1">
                     <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
                     <button type="submit" class="btn btn-dark"><i class="fa-solid fa-flag"></i> Report</button>
                 </form>
+                <!-- delete button if current user has role=0 or is the author -->
+                <?php if (($_SESSION['role'] == 0) || ($_SESSION['username'] == $post['author'])) : ?>
+                    <form action="<?= ROOT; ?>posts/delete" method="post">
+                        <input type="hidden" name="id" value="<?= $post['id']; ?>">
+                        <button class="btn btn-danger" type="submit">
+                            <i class="fa-solid fa-trash"></i>
+                            <b>Delete</b>
+                        </button>
+                    </form>
+                <?php endif; ?>
             </div>
         </div>
     </div>
@@ -106,8 +116,8 @@ $vote_count = $votingctrl->votingScore(0, $post["id"]);
             </div>
         </div>
         <?php
-        $cmtctrl = new CommentCtrl();
-        $cmtctrl->generateCommentSection();
+        $cmtCtrl = new CommentCtrl();
+        $cmtCtrl->generateCommentSection();
         ?>
     </div>
 </div>

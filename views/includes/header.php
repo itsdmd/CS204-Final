@@ -28,7 +28,7 @@
                             <a class="nav-link" href="<?= ROOT; ?>login"><i class="fas fa-user"></i> Login</a>
                         </li>
                     <?php
-                        header("Location: " . ROOT . "logout");
+                    // header("Location: " . ROOT . "logout");
                     endif;
                     ?>
                 </ul>

@@ -18,28 +18,28 @@ class PostCtrl extends Controller {
     }
 
     public function fetchPostById($id) {
-        $postctrl = new Post($this->conn);
-        return $postctrl->fetchPostById($id);
+        $postCtrl = new Post($this->conn);
+        return $postCtrl->fetchPostById($id);
     }
 
     public function fetchAllPosts() {
-        $postctrl = new Post($this->conn);
-        return $postctrl->fetchAllPosts();
+        $postCtrl = new Post($this->conn);
+        return $postCtrl->fetchAllPosts();
     }
 
     public function fetchAllPostsByCurrentUser() {
-        $postctrl = new Post($this->conn);
-        return $postctrl->fetchAllPostsByCurrentUser();
+        $postCtrl = new Post($this->conn);
+        return $postCtrl->fetchAllPostsByCurrentUser();
     }
 
     public function fetchAllPostsNotByCurrentUser() {
-        $postctrl = new Post($this->conn);
-        return $postctrl->fetchAllPostsNotByCurrentUser();
+        $postCtrl = new Post($this->conn);
+        return $postCtrl->fetchAllPostsNotByCurrentUser();
     }
 
     public function searchPosts($type, $needle) {
-        $postctrl = new Post($this->conn);
-        return $postctrl->fetchPostsByMatched($type, $needle);
+        $postCtrl = new Post($this->conn);
+        return $postCtrl->fetchPostsByMatched($type, $needle);
     }
 
     public function createPost() {
@@ -69,7 +69,7 @@ class PostCtrl extends Controller {
     }
 
     public function reportPost($id) {
-        $rptctrl = new Report($this->conn);
-        $rptctrl->addReport(0, $id, $_SESSION["username"]);
+        $rptCtrl = new Report($this->conn);
+        $rptCtrl->addReport(0, $id, $_SESSION["username"]);
     }
 }

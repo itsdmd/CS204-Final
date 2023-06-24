@@ -71,9 +71,19 @@ Router::post("posts/edit", function () {
 });
 
 Router::post("posts/delete", function () {
-    $post = new PostCtrl();
-    $post->deletePost($_POST["post-id"]);
-    header("Location: " . ROOT . "profile");
+    // get current url
+    $postCtrl = new PostCtrl();
+    $post = $postCtrl->fetchPostById($_POST["post-id"]);
+    if ($post["author"] == $_SESSION["username"]) {
+        $url = "profile";
+    } else {
+        $url = "posts";
+    }
+
+    $deletedCtrl = new DeletedCtrl();
+    $deletedCtrl->deletePost($_POST["post-id"], $_SESSION["username"]);
+
+    header("Location: " . ROOT . $url);
 });
 
 Router::post("posts/report", function () {
@@ -94,8 +104,8 @@ Router::get("posts/search", function () {
         exit();
     }
 
-    $postctrl = new PostCtrl();
-    $posts = $postctrl->searchPosts($_GET["type"], $_GET["needle"]);
+    $postCtrl = new PostCtrl();
+    $posts = $postCtrl->searchPosts($_GET["type"], $_GET["needle"]);
 
     // get id of all posts
     $ids = array();
@@ -113,6 +123,13 @@ Router::get("posts/search", function () {
 Router::post("comments/add", function () {
     $comment = new CommentCtrl();
     $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["content"]);
+
+    header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
+});
+
+Router::post("comments/delete", function () {
+    $deletedCtrl = new DeletedCtrl();
+    $deletedCtrl->deleteComment($_POST["comment-id"], $_SESSION["username"]);
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });

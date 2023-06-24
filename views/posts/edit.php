@@ -1,13 +1,13 @@
 <?php
-$postctrl = new PostCtrl();
+$postCtrl = new PostCtrl();
 $url_exploded = explode("/", $_GET["url"]);
-if ($_SESSION["username"] != $postctrl->fetchPostById(end($url_exploded))["author"]) {
+if ($_SESSION["username"] != $postCtrl->fetchPostById(end($url_exploded))["author"]) {
     header("Location: " . ROOT . "posts/view/" . end($url_exploded));
     exit();
 }
 
 include "views/includes/header.php";
-$post = $postctrl->fetchPostById(end($url_exploded));
+$post = $postCtrl->fetchPostById(end($url_exploded));
 ?>
 
 <div class="container mt-5 p-5">

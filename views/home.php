@@ -30,15 +30,15 @@
 
         <!-- Fetch all posts and show them as cards -->
         <?php
-        $postsctrl = new PostCtrl();
+        $postsCtrl = new PostCtrl();
         $posts = null;
 
         if (isset($_POST["ids"]) && is_array($_POST["ids"]) && count($_POST["ids"]) > 0) {
             foreach ($_POST["ids"] as $id) {
-                $posts[] = $postsctrl->fetchPostById($id);
+                $posts[] = $postsCtrl->fetchPostById($id);
             }
         } else {
-            $posts = $postsctrl->fetchAllPostsNotByCurrentUser();
+            $posts = $postsCtrl->fetchAllPostsNotByCurrentUser();
         }
 
         foreach ($posts as $post) : ?>
@@ -63,10 +63,22 @@
                                             }
                                             echo $content;
                                             ?></p>
-                    <button class="btn btn-info" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
-                        <i class="fa-solid fa-eye"></i>
-                        <b>Read</b>
-                    </button>
+                    <div class="d-flex">
+                        <button class="btn btn-info mr-2" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
+                            <i class="fa-solid fa-eye"></i>
+                            <b>Read</b>
+                        </button>
+                        <!-- delete button if current user has role=0 -->
+                        <?php if ($_SESSION['role'] == 0) : ?>
+                            <form action="<?= ROOT; ?>posts/delete" method="post">
+                                <input type="hidden" name="post-id" value="<?= $post['id']; ?>">
+                                <button class="btn btn-danger" type="submit">
+                                    <i class="fa-solid fa-trash"></i>
+                                    <b>Delete</b>
+                                </button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
 

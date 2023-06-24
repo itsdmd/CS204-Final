@@ -10,18 +10,26 @@ class CommentCtrl extends Controller {
         $cmtmdl->addComment($author, $type, $reply_to, $content);
     }
 
+    public function deleteComment($comment_id, $deleter) {
+        $cmtmdl = new Comment($this->conn);
+        $cmtmdl->deleteComment($comment_id, $deleter);
+    }
+
     public function reportComment($target_id, $reporter) {
-        $rptctrl = new ReportCtrl();
-        $rptctrl->addReport(1, $target_id, $reporter);
+        $rptCtrl = new ReportCtrl();
+        $rptCtrl->addReport(1, $target_id, $reporter);
     }
 
     public function fetchAllCommentsByTargetId($type, $id) {
         $cmtmdl = new Comment($this->conn);
-        return $cmtmdl->fetchAllCommentsByTargetId($type, $id);
+        $result = $cmtmdl->fetchAllCommentsByTargetId($type, $id);
+
+        $deletedCtrl = new DeletedCtrl();
+        return $deletedCtrl->filterOutDeletedItems(1, $result);
     }
 
     public function generateCommentChain($comment, $current_level) {
-        $html  = "<div class='col-12'";
+        $html  = "<div class='col-12 border-info border-left";
         if ($current_level < 0) {
             $current_level = 0;
         }
@@ -59,13 +67,13 @@ class CommentCtrl extends Controller {
         $html .= "<div class='col-12 d-flex justify-content-end align-items-center'>";
 
         // voting count
-        $votectrl = new VotingCtrl();
-        $vote_count = $votectrl->votingScore(1, $comment["id"]);
+        $voteCtrl = new VotingCtrl();
+        $vote_count = $voteCtrl->votingScore(1, $comment["id"]);
         $html .= "  <p class='text-secondary'><b>" . $vote_count . "</b> votes</p>";
 
         // voting buttons
-        $html .= "  <div class='d-flex gap-1'>";
-        $html .= "      <form action='" . ROOT . "comments/voting' method='POST'>";
+        $html .= "  <div class='d-flex'>";
+        $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-1'>";
         $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
         $html .= "          <input type='hidden' name='target-type' value='1'>";
         $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
@@ -74,7 +82,7 @@ class CommentCtrl extends Controller {
         $html .= "          <button type='submit' class='btn btn-success mr-1'><i class='fa-solid fa-arrow-up'></i></button>";
         $html .= "      </form>";
 
-        $html .= "      <form action='" . ROOT . "comments/voting' method='POST'>";
+        $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-2'>";
         $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
         $html .= "          <input type='hidden' name='target-type' value='1'>";
         $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
@@ -85,11 +93,20 @@ class CommentCtrl extends Controller {
         $html .= "  </div>";
 
         // report button
-        $html .= "  <form action='" . ROOT . "comments/report' method='POST'>";
+        $html .= "  <form action='" . ROOT . "comments/report' method='POST' class='mr-1'>";
         $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
         $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
         $html .= "      <button type='submit' class='btn btn-dark'><i class='fa-solid fa-flag'></i></button>";
         $html .= "  </form>";
+
+        // delete button for role=0 or created by current user
+        if (($_SESSION["role"] == 0) || ($_SESSION["username"] == $comment["author"])) {
+            $html .= "  <form action='" . ROOT . "comments/delete' method='POST'>";
+            $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
+            $html .= "      <button type='submit' class='btn btn-danger'><i class='fa-solid fa-trash'></i></button>";
+            $html .= "  </form>";
+        }
 
         $html .= "</div>";
 
@@ -102,10 +119,10 @@ class CommentCtrl extends Controller {
     }
 
     public function generateCommentSection() {
-        $cmtctrl = new CommentCtrl();
+        $cmtCtrl = new CommentCtrl();
         $url_exploded = explode("/", $_GET["url"]);
-        foreach ($cmtctrl->fetchAllCommentsByTargetId(0, end($url_exploded)) as $comment) {
-            echo $cmtctrl->generateCommentChain($comment, 0);
+        foreach ($cmtCtrl->fetchAllCommentsByTargetId(0, end($url_exploded)) as $comment) {
+            echo $cmtCtrl->generateCommentChain($comment, 0);
         }
     }
 }
