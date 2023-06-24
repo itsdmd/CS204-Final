@@ -30,6 +30,11 @@ Router::post("register", function () {
 });
 
 Router::get("profile", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $profile = new ProfileCtrl();
     $profile->viewProfilePage();
 });
@@ -44,33 +49,63 @@ Router::get("posts", function () {
 });
 
 Router::get("posts/view/{id}", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->viewPost();
 });
 
 Router::get("posts/create", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->viewCreatePostPage();
 });
 
 Router::post("posts/create", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->createPost();
     header("Location: " . ROOT . "profile");
 });
 
 Router::get("posts/edit/{id}", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->viewEditPostPage();
 });
 
 Router::post("posts/edit", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->editPost($_POST["post-id"]);
     header("Location: " . ROOT . "profile");
 });
 
 Router::post("posts/delete", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     // get current url
     $postCtrl = new PostCtrl();
     $post = $postCtrl->fetchPostById($_POST["post-id"]);
@@ -87,18 +122,33 @@ Router::post("posts/delete", function () {
 });
 
 Router::post("posts/report", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new PostCtrl();
     $post->reportPost($_POST["post-id"]);
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
 Router::post("posts/voting", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new VotingCtrl();
     $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
     header("Location: " . ROOT . "posts/view/" . $_POST["target-id"]);
 });
 
 Router::get("posts/search", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     if ((!isset($_GET["type"]) || !isset($_GET["needle"])) || ($_GET["type"] == "" || $_GET["needle"] == "")) {
         header("Location: " . ROOT);
         exit();
@@ -121,6 +171,11 @@ Router::get("posts/search", function () {
 });
 
 Router::post("comments/add", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $comment = new CommentCtrl();
     $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["content"]);
 
@@ -128,6 +183,11 @@ Router::post("comments/add", function () {
 });
 
 Router::post("comments/delete", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $deletedCtrl = new DeletedCtrl();
     $deletedCtrl->deleteComment($_POST["comment-id"], $_SESSION["username"]);
 
@@ -135,6 +195,11 @@ Router::post("comments/delete", function () {
 });
 
 Router::post("comments/report", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $comment = new CommentCtrl();
     $comment->reportComment($_POST["comment-id"], $_SESSION["username"]);
 
@@ -142,6 +207,11 @@ Router::post("comments/report", function () {
 });
 
 Router::post("comments/voting", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
     $post = new VotingCtrl();
     $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
