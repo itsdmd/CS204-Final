@@ -73,7 +73,7 @@ class Post {
     }
 
     public function editPost($id, $title, $content, $tags) {
-        $sql = "UPDATE post SET title = ?, content = ?, tags = ? WHERE id = ?";
+        $sql = "UPDATE post SET title = ?, content = ?, tags = ?, date_modified = DEFAULT WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssss", $title, $content, $tags, $id);
         $stmt->execute();
