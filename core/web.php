@@ -45,7 +45,8 @@ Router::get("logout", function () {
 });
 
 Router::get("posts", function () {
-    header("Location: " . ROOT);
+    $postCtrl = new PostCtrl();
+    $postCtrl->viewPostsPage();
 });
 
 Router::get("posts/view/{id}", function () {
@@ -166,8 +167,7 @@ Router::get("posts/search", function () {
     // attach to $_POST
     $_POST["ids"] = $ids;
 
-    $home = new HomeCtrl();
-    $home->index();
+    $postCtrl->viewPostsPage();
 });
 
 Router::post("comments/add", function () {

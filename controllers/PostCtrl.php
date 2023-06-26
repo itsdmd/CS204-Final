@@ -5,6 +5,10 @@ class PostCtrl extends Controller {
         parent::__construct();
     }
 
+    public function viewPostsPage() {
+        include "views/posts/all.php";
+    }
+
     public function viewPost() {
         include "views/posts/view.php";
     }
