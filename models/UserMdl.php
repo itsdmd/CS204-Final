@@ -7,6 +7,7 @@ class User {
     public $username;
     public $password;
     public $role;
+    public $avatar_id;
 
     protected $conn;
 
@@ -55,5 +56,45 @@ class User {
             $this->role = "0";
             $this->createNewUser();
         }
+    }
+
+    public function getUserAvatarId($username) {
+        $this->username = $username;
+        if (!$this->userExists()) {
+            return false;
+        }
+
+        $sql = "SELECT avatar_id FROM user WHERE username = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $result["avatar_id"];
+    }
+
+    public function getUserAvatarPath($username) {
+        $this->username = $username;
+        if (!$this->userExists()) {
+            return false;
+        }
+
+        $sql = "SELECT path FROM media WHERE id = (SELECT avatar_id FROM user WHERE username = ? )";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        return $result["path"];
+    }
+
+    public function setUserAvatar($file_id) {
+        $sql = "UPDATE user SET avatar_id = ? WHERE username = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("is", $file_id, $this->username);
+        $stmt->execute();
+        $stmt->close();
     }
 }

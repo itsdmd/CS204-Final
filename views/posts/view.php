@@ -25,6 +25,15 @@ $report_existed = $reportCtrl->reportExisted($post["id"], $_SESSION["username"])
             </div>
             <p class="text-secondary">
                 <i>by</i>
+                &nbsp;&nbsp;
+                <img src="<?php
+                            $userCtrl = new UserCtrl();
+                            if ($userCtrl->getUserAvatarId($post["author"])) {
+                                echo ROOT . 'img/uploads/' . $userCtrl->getUserAvatarPath($post["author"]);
+                            } else {
+                                echo ROOT . 'img/default_avatar.png"';
+                            }
+                            ?>" alt="avatar" width="20" height="20" class="rounded-circle">
                 <b><?= $post["author"] ?></b>
                 &nbsp;&nbsp;
                 |

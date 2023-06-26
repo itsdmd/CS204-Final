@@ -69,4 +69,20 @@ class UserCtrl extends Controller {
             return "1";
         }
     }
+
+    public function getUserAvatarId($username) {
+        $user = new User($this->conn);
+        return $user->getUserAvatarId($username);
+    }
+
+    public function getUserAvatarPath($username) {
+        $user = new User($this->conn);
+        return $user->getUserAvatarPath($username);
+    }
+
+    public function setUserAvatar($username, $file_id) {
+        $user = new User($this->conn);
+        $user->username = $username;
+        $user->setUserAvatar($file_id);
+    }
 }

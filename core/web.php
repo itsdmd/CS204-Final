@@ -217,6 +217,27 @@ Router::post("comments/voting", function () {
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
+Router::post("upload/avatar", function () {
+    if (!isset($_SESSION["username"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
+
+    if (!isset($_FILES["file"])) {
+        header("Location: " . ROOT . "profile");
+        exit();
+    }
+
+    $uploadCtrl = new MediaCtrl();
+    $file_name = $uploadCtrl->uploadMedia();
+    $file_id = $uploadCtrl->getFileIdByPath($file_name);
+
+    $userCtrl = new UserCtrl();
+    $userCtrl->setUserAvatar($_SESSION["username"], $file_id);
+
+    header("Location: " . ROOT . "profile");
+});
+
 if (Router::$found === false) {
     include "views/_404.php";
 }
