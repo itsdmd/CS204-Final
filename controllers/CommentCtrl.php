@@ -54,18 +54,20 @@ class CommentCtrl extends Controller {
         // reply form
         $exploded_url = explode("/", $_GET["url"]);
         $current_post_id = end($exploded_url);
-        $html .= "  <div class='mb-3 d-flex flex-column'>";
-        $html .= "      <form action='" . ROOT . "comments/add' method='POST' id='comment-form' class='d-flex align-items-center'>";
-        $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-        $html .= "          <input type='hidden' name='author' value='" . $_SESSION["username"] . "'>";
-        $html .= "          <input type='hidden' name='type' value='1'>";
-        $html .= "          <input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
-        $html .= "          <input name='content' class='form-control' placeholder='Write a reply...'>";
+        if (isset($_SESSION['role']) && ($_SESSION['role'] != '-1')) {
+            $html .= "  <div class='mb-3 d-flex flex-column'>";
+            $html .= "      <form action='" . ROOT . "comments/add' method='POST' id='comment-form' class='d-flex align-items-center'>";
+            $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "          <input type='hidden' name='author' value='" . $_SESSION["username"] . "'>";
+            $html .= "          <input type='hidden' name='type' value='1'>";
+            $html .= "          <input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
+            $html .= "          <input name='content' class='form-control' placeholder='Write a reply...'>";
 
-        // submit reply button
-        $html .= "          <button type='submit' class='btn btn-info ml-2'><i class='fa-solid fa-paper-plane'></i></button>";
-        $html .= "      </form>";
-        $html .= "  </div>";
+            // submit reply button
+            $html .= "          <button type='submit' class='btn btn-info ml-2'><i class='fa-solid fa-paper-plane'></i></button>";
+            $html .= "      </form>";
+            $html .= "  </div>";
+        }
 
         $html .= "</div>";
 
@@ -87,46 +89,48 @@ class CommentCtrl extends Controller {
         $html .= "' ><b>" . $vote_count . "</b> votes</p>";
 
         // voting buttons
-        $html .= "  <div class='d-flex'>";
-        $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-1'>";
-        $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
-        $html .= "          <input type='hidden' name='target-type' value='1'>";
-        $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
-        $html .= "          <input type='hidden' name='is-upvote' value='1'>";
-        $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-        $html .= "          <button type='submit' class='btn btn";
-        if (!$upvote_existed) {
-            $html .= "-outline";
-        }
-        $html .= "-success mr-1'><i class='fa-solid fa-arrow-up'></i></button>";
-        $html .= "      </form>";
+        if (isset($_SESSION['role']) && ($_SESSION['role'] != '-1')) {
+            $html .= "  <div class='d-flex'>";
+            $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-1'>";
+            $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
+            $html .= "          <input type='hidden' name='target-type' value='1'>";
+            $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
+            $html .= "          <input type='hidden' name='is-upvote' value='1'>";
+            $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "          <button type='submit' class='btn btn";
+            if (!$upvote_existed) {
+                $html .= "-outline";
+            }
+            $html .= "-success mr-1'><i class='fa-solid fa-arrow-up'></i></button>";
+            $html .= "      </form>";
 
-        $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-2'>";
-        $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
-        $html .= "          <input type='hidden' name='target-type' value='1'>";
-        $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
-        $html .= "          <input type='hidden' name='is-upvote' value='0'>";
-        $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-        $html .= "          <button type='submit' class='btn btn";
-        if (!$downvote_existed) {
-            $html .= "-outline";
-        }
-        $html .= "-danger mr-1'><i class='fa-solid fa-arrow-down'></i></button>";
-        $html .= "      </form>";
-        $html .= "  </div>";
+            $html .= "      <form action='" . ROOT . "comments/voting' method='POST' class='mr-2'>";
+            $html .= "          <input type='hidden' name='target-id' value='" . $comment["id"] . "'>";
+            $html .= "          <input type='hidden' name='target-type' value='1'>";
+            $html .= "          <input type='hidden' name='voter' value='" . $_SESSION["username"] . "'>";
+            $html .= "          <input type='hidden' name='is-upvote' value='0'>";
+            $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "          <button type='submit' class='btn btn";
+            if (!$downvote_existed) {
+                $html .= "-outline";
+            }
+            $html .= "-danger mr-1'><i class='fa-solid fa-arrow-down'></i></button>";
+            $html .= "      </form>";
+            $html .= "  </div>";
 
-        // report button
-        $html .= "  <form action='" . ROOT . "comments/report' method='POST' class='mr-1'>";
-        $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-        $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
-        $html .= "      <button type='submit' class='btn btn";
-        if ($report_existed) {
-            $html .= "-dark";
-        } else {
-            $html .= "-outline-dark";
+            // report button
+            $html .= "  <form action='" . ROOT . "comments/report' method='POST' class='mr-1'>";
+            $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
+            $html .= "      <button type='submit' class='btn btn";
+            if ($report_existed) {
+                $html .= "-dark";
+            } else {
+                $html .= "-outline-dark";
+            }
+            $html .= "'><i class='fa-solid fa-flag'></i></button>";
+            $html .= "  </form>";
         }
-        $html .= "'><i class='fa-solid fa-flag'></i></button>";
-        $html .= "  </form>";
 
         // delete button for role=0 or created by current user
         if (($_SESSION["role"] == 0) || ($_SESSION["username"] == $comment["author"])) {

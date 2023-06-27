@@ -14,8 +14,6 @@ class UserCtrl extends Controller {
 
     public function viewLoginPage() {
         include "views/login.php";
-        $initAdmin = new User($this->conn);
-        $initAdmin->initAdmin();
     }
 
     public function userLogin() {
@@ -46,7 +44,7 @@ class UserCtrl extends Controller {
     }
 
     public function userRegister() {
-        $invalid_usernames = ["-1", "admin", "moderator", "superuser"];
+        $invalid_usernames = ["admin", "moderator", "superuser", "guest"];
 
         $user = new User($this->conn);
         $user->username = $this->req["reg-username"];

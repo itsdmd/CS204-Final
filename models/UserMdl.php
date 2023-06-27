@@ -45,19 +45,6 @@ class User {
         $stmt->close();
     }
 
-    public function initAdmin() {
-        $sql = "SELECT * FROM user WHERE username = 'admin'";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows === 0) {
-            $this->username = "admin";
-            $this->password = password_hash("superuser", PASSWORD_DEFAULT);
-            $this->role = "0";
-            $this->createNewUser();
-        }
-    }
-
     public function getUserAvatarId($username) {
         $this->username = $username;
         if (!$this->userExists()) {

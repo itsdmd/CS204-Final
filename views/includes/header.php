@@ -16,12 +16,12 @@
             <a class="navbar-brand" href="<?= ROOT; ?>"><i class="fas fa-icons"></i> Bludist</a>
             <div id="my-nav" class="collapse navbar-collapse">
                 <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="<?= ROOT; ?>posts"><i class="fa-solid fa-file-invoice"></i> Posts</a>
+                    </li>
                     <?php
-                    if (isset($_SESSION['username'])) :
+                    if (isset($_SESSION['role']) && $_SESSION['role'] != "-1") :
                     ?>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="<?= ROOT; ?>posts"><i class="fa-solid fa-file-invoice"></i> Posts</a>
-                        </li>
                         <li class="nav-item active">
                             <a class="nav-link" href="<?= ROOT; ?>profile">
                                 <?php
