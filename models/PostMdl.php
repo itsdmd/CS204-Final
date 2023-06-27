@@ -22,9 +22,20 @@ class Post {
         return $result->fetch_assoc();
     }
 
-    public function fetchAllPosts() {
-        $sql = "SELECT * FROM post";
-        $stmt = $this->conn->prepare($sql);
+    public function fetchAllPosts($offset, $limit) {
+        $offset = intval($offset);
+        $offset = $offset * 10;
+        $limit = intval($limit);
+
+        if ($limit == -1) {
+            $sql = "SELECT * FROM post LIMIT 18446744073709551615 OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $offset);
+        } else {
+            $sql = "SELECT * FROM post LIMIT ? OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ii", $limit, $offset);
+        }
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -32,10 +43,20 @@ class Post {
         return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
-    public function fetchAllPostsByCurrentUser() {
-        $sql = "SELECT * FROM post WHERE author = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $_SESSION["username"]);
+    public function fetchAllPostsByCurrentUser($offset, $limit) {
+        $offset = intval($offset);
+        $offset = $offset * 10;
+        $limit = intval($limit);
+
+        if ($limit == -1) {
+            $sql = "SELECT * FROM post WHERE author = ? LIMIT 18446744073709551615 OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("si", $_SESSION["username"], $offset);
+        } else {
+            $sql = "SELECT * FROM post WHERE author = ? LIMIT ? OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
+        }
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
@@ -43,10 +64,20 @@ class Post {
         return $deletedCtrl->filterOutDeletedItems(0, $results);
     }
 
-    public function fetchAllPostsNotByCurrentUser() {
-        $sql = "SELECT * FROM post WHERE author != ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $_SESSION["username"]);
+    public function fetchAllPostsNotByCurrentUser($offset, $limit) {
+        $offset = intval($offset);
+        $offset = $offset * 10;
+        $limit = intval($limit);
+
+        if ($limit == -1) {
+            $sql = "SELECT * FROM post WHERE author != ? LIMIT 18446744073709551615 OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("si", $_SESSION["username"], $offset);
+        } else {
+            $sql = "SELECT * FROM post WHERE author != ? LIMIT ? OFFSET ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
+        }
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 

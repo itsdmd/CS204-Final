@@ -51,6 +51,10 @@ Router::get("logout", function () {
 });
 
 Router::get("posts", function () {
+    header("Location: " . ROOT . "posts/1");
+});
+
+Router::get("posts/{page}", function () {
     $postCtrl = new PostCtrl();
     $postCtrl->viewPostsPage();
 });

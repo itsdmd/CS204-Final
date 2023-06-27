@@ -36,7 +36,11 @@
             $posts[] = $postsCtrl->fetchPostById($id);
         }
     } else {
-        $posts = $postsCtrl->fetchAllPostsNotByCurrentUser();
+        // page number is the last part of the URL
+        $url_parts = explode("/", $_SERVER["REQUEST_URI"]);
+        // convert to int
+        $page = intval(end($url_parts));
+        $posts = $postsCtrl->fetchAllPostsNotByCurrentUser($page - 1, 10);
     }
 
     foreach ($posts as $post) : ?>
@@ -90,6 +94,23 @@
         </div>
 
     <?php endforeach; ?>
+
+    <!-- pagination -->
+    <nav aria-label="Page navigation" class="d-flex justify-content-end">
+        <ul class="pagination">
+            <?php
+            $allPosts = $postsCtrl->fetchAllPostsNotByCurrentUser(0, -1);
+            $pagesCount = ceil(count($allPosts) / 10);
+
+            for ($i = 1; $i <= $pagesCount; $i++) : ?>
+                <li class="page-item <?php if ($page == $i) {
+                                            echo "active";
+                                        } ?>">
+                    <a class="page-link" href="<?= ROOT; ?>posts/<?= $i; ?>"><?= $i; ?></a>
+                </li>
+            <?php endfor; ?>
+        </ul>
+    </nav>
 </div>
 
 
