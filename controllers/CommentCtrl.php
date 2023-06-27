@@ -20,7 +20,7 @@ class CommentCtrl extends Controller {
         $result = $cmtmdl->fetchAllCommentsByTargetId($type, $id);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(1, $result);
+        return $deletedCtrl->filterOutHiddenItems(1, $result);
     }
 
     public function generateCommentChain($comment, $current_level) {

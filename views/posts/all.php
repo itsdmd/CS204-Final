@@ -99,14 +99,21 @@
     <nav aria-label="Page navigation" class="d-flex justify-content-end">
         <ul class="pagination">
             <?php
-            $allPosts = $postsCtrl->fetchAllPostsNotByCurrentUser(0, -1);
+            $url = $_SERVER["REQUEST_URI"];
+
+            if (str_contains($url, "page")) {
+                $allPosts = $postsCtrl->fetchAllPostsNotByCurrentUser(0, -1);
+            } else {
+                $allPosts = array();
+            }
+
             $pagesCount = ceil(count($allPosts) / 10);
 
             for ($i = 1; $i <= $pagesCount; $i++) : ?>
                 <li class="page-item <?php if ($page == $i) {
                                             echo "active";
                                         } ?>">
-                    <a class="page-link" href="<?= ROOT; ?>posts/<?= $i; ?>"><?= $i; ?></a>
+                    <a class="page-link" href="<?= ROOT; ?>posts/page/<?= $i; ?>"><?= $i; ?></a>
                 </li>
             <?php endfor; ?>
         </ul>

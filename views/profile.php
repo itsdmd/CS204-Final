@@ -1,10 +1,8 @@
 <?php
 include "views/includes/header.php";
-
 ?>
 
 <div class="container mt-5 p-5">
-
     <div class="row">
         <div class="col-12">
             <h1>Profile</h1>
@@ -83,7 +81,7 @@ include "views/includes/header.php";
                 <tbody>
                     <?php
                     $posts = new PostCtrl();
-                    foreach ($posts->fetchAllPostsByCurrentUser() as $post) :
+                    foreach ($posts->fetchAllPostsByCurrentUser(0, -1) as $post) :
                     ?>
                         <tr>
                             <td><?= $post["id"] ?></td>

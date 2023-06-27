@@ -20,7 +20,7 @@ class DeletedCtrl extends Controller {
         return $deletedmdl->itemIsHidden($type, $id);
     }
 
-    public function filterOutDeletedItems($type, $items) {
+    public function filterOutHiddenItems($type, $items) {
         $deletedmdl = new Deleted($this->conn);
         foreach ($items as $key => $value) {
             if ($deletedmdl->itemIsHidden($type, $value["id"])) {

@@ -16,7 +16,7 @@ class Comment {
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(1, $results);
+        return $deletedCtrl->filterOutHiddenItems(1, $results);
     }
 
     public function addComment($author, $type, $reply_to, $content) {

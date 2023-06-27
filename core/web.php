@@ -51,10 +51,10 @@ Router::get("logout", function () {
 });
 
 Router::get("posts", function () {
-    header("Location: " . ROOT . "posts/1");
+    header("Location: " . ROOT . "posts/page/1");
 });
 
-Router::get("posts/{page}", function () {
+Router::get("posts/page/{page}", function () {
     $postCtrl = new PostCtrl();
     $postCtrl->viewPostsPage();
 });

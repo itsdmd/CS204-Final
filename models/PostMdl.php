@@ -28,7 +28,7 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post LIMIT 18446744073709551615 OFFSET ?";
+            $sql = "SELECT * FROM post LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $offset);
         } else {
@@ -40,7 +40,7 @@ class Post {
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(0, $results);
+        return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
     public function fetchAllPostsByCurrentUser($offset, $limit) {
@@ -49,7 +49,7 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post WHERE author = ? LIMIT 18446744073709551615 OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author = ? LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("si", $_SESSION["username"], $offset);
         } else {
@@ -61,7 +61,7 @@ class Post {
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(0, $results);
+        return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
     public function fetchAllPostsNotByCurrentUser($offset, $limit) {
@@ -70,7 +70,7 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post WHERE author != ? LIMIT 18446744073709551615 OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author != ? LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("si", $_SESSION["username"], $offset);
         } else {
@@ -82,7 +82,7 @@ class Post {
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(0, $results);
+        return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
     public function fetchPostsByMatched($type, $needle) {
@@ -93,7 +93,7 @@ class Post {
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
         $deletedCtrl = new DeletedCtrl();
-        return $deletedCtrl->filterOutDeletedItems(0, $results);
+        return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
     public function createPost($title, $content, $author, $tags) {
