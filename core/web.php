@@ -99,8 +99,12 @@ Router::post("posts/delete", function () {
 });
 
 Router::post("posts/report", function () {
-    $post = new PostCtrl();
-    $post->reportPost($_POST["post-id"]);
+    $reportCtrl = new ReportCtrl();
+    if ($reportCtrl->reportExisted(0, $_POST["post-id"], $_SESSION["username"])) {
+        $reportCtrl->deleteReport(0, $_POST["post-id"], $_SESSION["username"]);
+    } else {
+        $reportCtrl->addReport(0, $_POST["post-id"], $_SESSION["username"]);
+    }
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
@@ -146,8 +150,12 @@ Router::post("comments/delete", function () {
 });
 
 Router::post("comments/report", function () {
-    $comment = new CommentCtrl();
-    $comment->reportComment($_POST["comment-id"], $_SESSION["username"]);
+    $reportCtrl = new ReportCtrl();
+    if ($reportCtrl->reportExisted(1, $_POST["comment-id"], $_SESSION["username"])) {
+        $reportCtrl->deleteReport(1, $_POST["comment-id"], $_SESSION["username"]);
+    } else {
+        $reportCtrl->addReport(1, $_POST["comment-id"], $_SESSION["username"]);
+    }
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });

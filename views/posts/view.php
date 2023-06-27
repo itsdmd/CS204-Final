@@ -11,7 +11,7 @@ $upvote_existed = $votingCtrl->voteExisted(0, $post["id"], $_SESSION["username"]
 $downvote_existed = $votingCtrl->voteExisted(0, $post["id"], $_SESSION["username"], 0);
 
 $reportCtrl = new ReportCtrl();
-$report_existed = $reportCtrl->reportExisted($post["id"], $_SESSION["username"]);
+$report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username"]);
 ?>
 
 <div class="container mt-5 p-5">

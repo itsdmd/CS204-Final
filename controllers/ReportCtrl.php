@@ -10,9 +10,14 @@ class ReportCtrl extends Controller {
         $rptmdl->addReport($target_type, $target_id, $reporter);
     }
 
-    public function reportExisted($target_id, $reporter) {
+    public function deleteReport($target_type, $target_id, $reporter) {
         $rptmdl = new Report($this->conn);
-        return $rptmdl->reportExisted($target_id, $reporter);
+        $rptmdl->deleteReport($target_type, $target_id, $reporter);
+    }
+
+    public function reportExisted($target_type, $target_id, $reporter) {
+        $rptmdl = new Report($this->conn);
+        return $rptmdl->reportExisted($target_type, $target_id, $reporter);
     }
 
     public function countReportsByTargetId($target_id) {

@@ -8,7 +8,7 @@ class Report {
     }
 
     public function addReport($target_type, $target_id, $reporter) {
-        if ($this->reportExisted($target_id, $reporter)) {
+        if ($this->reportExisted($target_type, $target_id, $reporter)) {
             return;
         }
 
@@ -19,10 +19,18 @@ class Report {
         $stmt->close();
     }
 
-    public function reportExisted($target_id, $reporter) {
-        $sql = "SELECT * FROM report WHERE target_id = ? AND reporter = ?";
+    public function deleteReport($target_type, $target_id, $reporter) {
+        $sql = "DELETE FROM report WHERE target_type = ? AND target_id = ? AND reporter = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("is", $target_id, $reporter);
+        $stmt->bind_param("iis", $target_type, $target_id, $reporter);
+        $stmt->execute();
+        $stmt->close();
+    }
+
+    public function reportExisted($target_type, $target_id, $reporter) {
+        $sql = "SELECT * FROM report WHERE target_type = ? AND target_id = ? AND reporter = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iis", $target_type, $target_id, $reporter);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();

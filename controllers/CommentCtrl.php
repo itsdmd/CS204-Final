@@ -15,11 +15,6 @@ class CommentCtrl extends Controller {
         $cmtmdl->deleteComment($comment_id, $deleter);
     }
 
-    public function reportComment($target_id, $reporter) {
-        $rptCtrl = new ReportCtrl();
-        $rptCtrl->addReport(1, $target_id, $reporter);
-    }
-
     public function fetchAllCommentsByTargetId($type, $id) {
         $cmtmdl = new Comment($this->conn);
         $result = $cmtmdl->fetchAllCommentsByTargetId($type, $id);
@@ -34,7 +29,7 @@ class CommentCtrl extends Controller {
         $downvote_existed = $voteCtrl->voteExisted(1, $comment["id"], $_SESSION["username"], false);
 
         $reportCtrl = new ReportCtrl();
-        $report_existed = $reportCtrl->reportExisted($comment["id"], $_SESSION["username"]);
+        $report_existed = $reportCtrl->reportExisted(1, $comment["id"], $_SESSION["username"]);
 
         $html  = "<div class='flex-grow-1 pl-3 border-info border-left' style='border-width: 5px; margin-left: " . ($current_level * 20) . "px;'>";
 
