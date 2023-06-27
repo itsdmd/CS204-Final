@@ -33,7 +33,8 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
                             } else {
                                 echo ROOT . 'img/default_avatar.png"';
                             }
-                            ?>" alt="avatar" width="20" height="20" class="rounded-circle">
+                            ?>" alt="avatar" width="20" height="20"
+                    class="rounded-circle">
                 <b><?= $post["author"] ?></b>
                 &nbsp;&nbsp;
                 |
@@ -61,7 +62,8 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
                     $tags[$key] = trim($tag);
                 }
                 foreach ($tags as $tag) : ?>
-                    <a class="badge bg-info text-light" href="<?= ROOT ?>posts/search?type=tags&needle=<?= $tag ?>"><?= $tag ?></a>
+                <a class="badge bg-info text-light"
+                    href="<?= ROOT ?>posts/search?type=tags&needle=<?= $tag ?>"><?= $tag ?></a>
                 <?php endforeach; ?>
 
             </p>
@@ -75,60 +77,128 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
             <!-- Voting -->
             <div class="d-flex gap-1">
                 <b>
-                    <p class="text-<?= ($vote_count > 0) ? "success" : (($vote_count == 0) ? "secondary" : "danger") ?> mr-4">
-                        <?= $vote_count ?> votes</p>
+                    <p
+                        class="text-<?= ($vote_count > 0) ? "success" : (($vote_count == 0) ? "secondary" : "danger") ?> mr-4">
+                        <?= $vote_count ?> points</p>
                 </b>
                 <!-- voting buttons -->
                 <?php if (isset($_SESSION["role"]) && ($_SESSION["role"] != "-1")) : ?>
-                    <form action="<?= ROOT ?>posts/voting" method="POST">
-                        <input type="hidden" name="target-id" value="<?= $post["id"] ?>">
-                        <input type="hidden" name="target-type" value="0">
-                        <input type="hidden" name="voter" value="<?= $_SESSION["username"] ?>">
-                        <input type="hidden" name="is-upvote" value="1">
-                        <button type="submit" class="btn btn-<?php if ($upvote_existed) {
+                <form action="<?= ROOT ?>posts/voting" method="POST">
+                    <input type="hidden" name="target-id"
+                        value="<?= $post["id"] ?>">
+                    <input type="hidden" name="target-type" value="0">
+                    <input type="hidden" name="voter"
+                        value="<?= $_SESSION["username"] ?>">
+                    <input type="hidden" name="is-upvote" value="1">
+                    <button type="submit" class="btn btn-<?php if ($upvote_existed) {
                                                                     echo "success";
                                                                 } else {
                                                                     echo "outline-success";
-                                                                } ?> mr-1"><i class="fa-solid fa-arrow-up"></i></button>
-                    </form>
-                    <form action="<?= ROOT ?>posts/voting" method="POST">
-                        <input type="hidden" name="target-id" value="<?= $post["id"] ?>">
-                        <input type="hidden" name="target-type" value="0">
-                        <input type="hidden" name="voter" value="<?= $_SESSION["username"] ?>">
-                        <input type="hidden" name="is-upvote" value="0">
-                        <button type="submit" class="btn btn-<?php if ($downvote_existed) {
+                                                                } ?> mr-1"><i
+                            class="fa-solid fa-arrow-up"></i></button>
+                </form>
+                <form action="<?= ROOT ?>posts/voting" method="POST">
+                    <input type="hidden" name="target-id"
+                        value="<?= $post["id"] ?>">
+                    <input type="hidden" name="target-type" value="0">
+                    <input type="hidden" name="voter"
+                        value="<?= $_SESSION["username"] ?>">
+                    <input type="hidden" name="is-upvote" value="0">
+                    <button type="submit" class="btn btn-<?php if ($downvote_existed) {
                                                                     echo "danger";
                                                                 } else {
                                                                     echo "outline-danger";
-                                                                } ?> mr-1"><i class="fa-solid fa-arrow-down"></i></button>
-                    </form>
+                                                                } ?> mr-1"><i
+                            class="fa-solid fa-arrow-down"></i></button>
+                </form>
                 <?php endif; ?>
             </div>
 
             <!-- Actions -->
             <div class="d-flex">
-                <button class="btn btn-warning mr-1" onclick="history.back()"><i class="fa-solid fa-arrow-left"></i> Return</button>
+                <button class="btn btn-warning mr-1" onclick="history.back()"><i
+                        class="fa-solid fa-arrow-left"></i> Return</button>
 
-                <?php if (isset($_SESSION["role"]) && ($_SESSION["role"] != "-1")) : ?>
-                    <form action="<?= ROOT ?>posts/report" method="POST" class="mr-1">
-                        <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
-                        <button type="submit" class="btn btn-<?php if ($report_existed) {
-                                                                    echo "dark";
-                                                                } else {
-                                                                    echo "outline-dark";
-                                                                } ?>"><i class="fa-solid fa-flag"></i> Report</button>
-                    </form>
+                <?php if (isset($_SESSION["role"]) && ($_SESSION["role"] != "-1") && ($_SESSION["role"] != "0")) : ?>
+                <form action="<?= ROOT ?>posts/report" method="POST"
+                    class="mr-1">
+                    <input type="hidden" name="post-id"
+                        value="<?= $post["id"] ?>">
+
+                    <button <?php if ($report_existed) {
+                                    echo "class='btn btn-dark' type='submit'";
+                                } else {
+                                    echo "class='btn btn-outline-dark' data-toggle='modal' data-target='#reportPostModal' type='button'";
+                                } ?>><i class="fa-solid fa-flag"></i>
+                        Report</button>
+                    <!-- report modal -->
+                    <div class="modal fade" id="reportPostModal" tabindex="-1"
+                        role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close"
+                                        data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div>
+                                        <form
+                                            action="<?= ROOT . "posts/report" ?>"
+                                            method="post">
+                                            <div class="mb-3">
+                                                <label for="reason"
+                                                    class="form-label">I want
+                                                    to report this post
+                                                    because</label>
+                                                <!-- multiple choice -->
+                                                <select class="form-select"
+                                                    name="reason">
+                                                    <option value="It's spam">
+                                                        It's a spam</option>
+                                                    <option
+                                                        value="It's inappropriate">
+                                                        It's
+                                                        inappropriate
+                                                    </option>
+                                                    <option
+                                                        value="It's offensive">
+                                                        It's
+                                                        offensive</option>
+                                                    <option
+                                                        value="It's misleading">
+                                                        It's misleading</option>
+                                                </select>
+                                            </div>
+
+                                            <input type="hidden" name="post-id"
+                                                value="<?= $post["id"] ?>">
+                                            <div class="modal-footer">
+                                                <button type="button"
+                                                    class="btn btn-secondary"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="submit"
+                                                    class="btn btn-info">Submit</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <?php endif; ?>
 
                 <!-- delete button if current user has role=0 or is the author -->
                 <?php if (($_SESSION['role'] == 0) || ($_SESSION['username'] == $post['author'])) : ?>
-                    <form action="<?= ROOT; ?>posts/delete" method="post">
-                        <input type="hidden" name="id" value="<?= $post['id']; ?>">
-                        <button class="btn btn-outline-danger" type="submit">
-                            <i class="fa-solid fa-trash"></i>
-                            <b>Delete</b>
-                        </button>
-                    </form>
+                <form action="<?= ROOT; ?>posts/delete" method="post">
+                    <input type="hidden" name="id" value="<?= $post['id']; ?>">
+                    <button class="btn btn-outline-danger" type="submit">
+                        <i class="fa-solid fa-trash"></i>
+                        <b>Delete</b>
+                    </button>
+                </form>
                 <?php endif; ?>
             </div>
         </div>
@@ -142,22 +212,28 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
         </div>
         <!-- comment form -->
         <?php if (isset($_SESSION["role"]) && ($_SESSION["role"] != "-1")) : ?>
-            <div class="col-12">
-                <div class="mb-3 d-flex flex-column">
-                    <form action="<?= ROOT ?>comments/add" method="POST" id="comment-form">
-                        <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
-                        <input type="hidden" name="author" value="<?= $_SESSION["username"] ?>">
-                        <input type="hidden" name="type" value="0">
-                        <input type="hidden" name="reply_to" value="<?= $post["id"] ?>">
-                        <input name="content" class="form-control mb-3" placeholder="Write a comment...">
+        <div class="col-12">
+            <div class="mb-3 d-flex flex-column">
+                <form action="<?= ROOT ?>comments/add" method="POST"
+                    id="comment-form">
+                    <input type="hidden" name="post-id"
+                        value="<?= $post["id"] ?>">
+                    <input type="hidden" name="author"
+                        value="<?= $_SESSION["username"] ?>">
+                    <input type="hidden" name="type" value="0">
+                    <input type="hidden" name="reply_to"
+                        value="<?= $post["id"] ?>">
+                    <input name="content" class="form-control mb-3"
+                        placeholder="Write a comment...">
 
-                        <div class="col-12 d-flex justify-content-end">
-                            <button type="submit" class="btn btn-info"><i class='fa-solid fa-paper-plane'></i>
-                                Submit</button>
-                        </div>
-                    </form>
-                </div>
+                    <div class="col-12 d-flex justify-content-end">
+                        <button type="submit" class="btn btn-info"><i
+                                class='fa-solid fa-paper-plane'></i>
+                            Submit</button>
+                    </div>
+                </form>
             </div>
+        </div>
         <?php
         endif;
 

@@ -5,9 +5,9 @@ class ReportCtrl extends Controller {
         parent::__construct();
     }
 
-    public function addReport($target_type, $target_id, $reporter) {
+    public function addReport($target_type, $target_id, $reporter, $reason) {
         $rptmdl = new Report($this->conn);
-        $rptmdl->addReport($target_type, $target_id, $reporter);
+        $rptmdl->addReport($target_type, $target_id, $reporter, $reason);
     }
 
     public function deleteReport($target_type, $target_id, $reporter) {

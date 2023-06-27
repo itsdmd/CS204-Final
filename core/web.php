@@ -107,7 +107,7 @@ Router::post("posts/report", function () {
     if ($reportCtrl->reportExisted(0, $_POST["post-id"], $_SESSION["username"])) {
         $reportCtrl->deleteReport(0, $_POST["post-id"], $_SESSION["username"]);
     } else {
-        $reportCtrl->addReport(0, $_POST["post-id"], $_SESSION["username"]);
+        $reportCtrl->addReport(0, $_POST["post-id"], $_SESSION["username"], $_POST["reason"]);
     }
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
@@ -158,7 +158,7 @@ Router::post("comments/report", function () {
     if ($reportCtrl->reportExisted(1, $_POST["comment-id"], $_SESSION["username"])) {
         $reportCtrl->deleteReport(1, $_POST["comment-id"], $_SESSION["username"]);
     } else {
-        $reportCtrl->addReport(1, $_POST["comment-id"], $_SESSION["username"]);
+        $reportCtrl->addReport(1, $_POST["comment-id"], $_SESSION["username"], $_POST["reason"]);
     }
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);

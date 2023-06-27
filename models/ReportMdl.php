@@ -7,14 +7,14 @@ class Report {
         $this->conn = $conn;
     }
 
-    public function addReport($target_type, $target_id, $reporter) {
+    public function addReport($target_type, $target_id, $reporter, $reason) {
         if ($this->reportExisted($target_type, $target_id, $reporter)) {
             return;
         }
 
-        $sql = "INSERT INTO report (target_type, target_id, reporter) VALUES (?, ?, ?)";
+        $sql = "INSERT INTO report (target_type, target_id, reporter, reason) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iis", $target_type, $target_id, $reporter);
+        $stmt->bind_param("iiss", $target_type, $target_id, $reporter, $reason);
         $stmt->execute();
         $stmt->close();
     }
