@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 24, 2023 at 02:16 AM
+-- Generation Time: Jun 27, 2023 at 01:19 PM
 -- Server version: 8.0.33
 -- PHP Version: 8.1.20
 
@@ -63,7 +63,12 @@ INSERT INTO `comment` (`id`, `author`, `type`, `reply_to`, `content`, `date_crea
 (20, 'Sophie', 1, 9, 'I found this very helpful.', '2023-06-19 08:52:46'),
 (21, 'Jane', 0, 27, 'That\'s awesome!', '2023-06-19 08:52:46'),
 (55, 'admin', 0, 21, 'test delete comment', '2023-06-24 08:49:34'),
-(56, 'test', 0, 21, 'Dope', '2023-06-24 09:14:12');
+(56, 'test', 0, 21, 'Dope', '2023-06-24 09:14:12'),
+(57, 'admin', 1, 56, 'Test reply', '2023-06-26 18:31:44'),
+(58, 'test', 1, 5, 'test', '2023-06-27 13:32:47'),
+(59, 'test', 1, 12, 'replying to olivia', '2023-06-27 13:43:03'),
+(60, 'test', 1, 5, 'replying to mike', '2023-06-27 13:43:42'),
+(61, 'test', 1, 4, 'Test replying to Sara\'s comment.', '2023-06-27 18:12:34');
 
 -- --------------------------------------------------------
 
@@ -84,7 +89,9 @@ CREATE TABLE `deleted` (
 --
 
 INSERT INTO `deleted` (`id`, `type`, `target_id`, `deleted_by`, `date_created`) VALUES
-(2, 1, 55, 'admin', '2023-06-24 08:52:46');
+(2, 1, 55, 'admin', '2023-06-24 08:52:46'),
+(12, 1, 58, 'test', '2023-06-27 13:39:27'),
+(13, 1, 60, 'test', '2023-06-27 13:43:44');
 
 -- --------------------------------------------------------
 
@@ -94,9 +101,18 @@ INSERT INTO `deleted` (`id`, `type`, `target_id`, `deleted_by`, `date_created`) 
 
 CREATE TABLE `media` (
   `id` int NOT NULL,
-  `format` int NOT NULL COMMENT '0: jpg | 1: png',
-  `path` text COLLATE utf8mb4_unicode_ci NOT NULL
+  `path` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `uploader` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `media`
+--
+
+INSERT INTO `media` (`id`, `path`, `uploader`) VALUES
+(1, 'default_avatar.png', 'admin'),
+(7, '64998c35dd7344.74870275.png', 'admin'),
+(12, '649a9299a32698.73479700.png', 'test');
 
 -- --------------------------------------------------------
 
@@ -140,7 +156,7 @@ INSERT INTO `post` (`id`, `author`, `title`, `content`, `media_id`, `tags`, `dat
 (38, 'admin', 'The Latest Technology Innovations', 'Technology is constantly innovating and creating new solutions to old problems. In this post, we discuss some of the latest technology innovations and their potential impact on our lives.', NULL, 'technology, future', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (39, 'Luke', 'The Science of Aging', 'Aging is a natural process that affects us all. In this post, we explore the science behind aging and how to age gracefully.', NULL, 'science, health', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (40, 'Sophie', 'The Art of Dance', 'Dance is a beautiful art form that allows us to express ourselves and connect with others. In this post, we explore the art of dance and share some tips for improving your dancing skills.', NULL, 'art, dance', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
-(43, 'test', 'This is a test post', 'Written as user named \"test\"', NULL, 'science', '2023-06-20 14:03:08', '2023-06-24 08:31:36');
+(43, 'test', 'This is a test post', 'Written as user named \"test\". Testing `date_modified` field.', NULL, 'science', '2023-06-20 14:03:08', '2023-06-24 09:18:22');
 
 -- --------------------------------------------------------
 
@@ -153,20 +169,17 @@ CREATE TABLE `report` (
   `target_type` int NOT NULL COMMENT '0: post | 1: comment | 2: user',
   `target_id` int NOT NULL,
   `reporter` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `reason` text COLLATE utf8mb4_unicode_ci
+  `reason` text COLLATE utf8mb4_unicode_ci,
+  `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `report`
 --
 
-INSERT INTO `report` (`id`, `target_type`, `target_id`, `reporter`, `reason`) VALUES
-(1, 0, 39, 'admin', NULL),
-(2, 0, 40, 'admin', NULL),
-(3, 0, 21, 'admin', NULL),
-(4, 1, 47, 'admin', NULL),
-(5, 0, 23, 'test', NULL),
-(6, 1, 13, 'test', NULL);
+INSERT INTO `report` (`id`, `target_type`, `target_id`, `reporter`, `reason`, `date_created`) VALUES
+(22, 1, 10, 'test', 'It\'s spam', '2023-06-27 20:17:44'),
+(23, 0, 27, 'test', 'It\'s offensive', '2023-06-27 20:18:54');
 
 -- --------------------------------------------------------
 
@@ -210,7 +223,7 @@ INSERT INTO `tag` (`id`, `name`, `description`) VALUES
 CREATE TABLE `user` (
   `username` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `password` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` tinyint NOT NULL DEFAULT '2' COMMENT '0: admin | 1: moderator | 2: user',
+  `role` tinyint NOT NULL DEFAULT '2' COMMENT '-1: guest | 0: admin | 1: user',
   `avatar_id` int DEFAULT NULL COMMENT 'ID of media used as avatar',
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -220,8 +233,8 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`username`, `password`, `role`, `avatar_id`, `date_created`) VALUES
-('admin', '$2y$10$mj2xIOWiQRH5.0wtyZRhZ.SPGMjVHly.m3nKf71Jmi2K5qJ2Ekv9C', 0, NULL, '2023-06-17 16:27:25'),
-('test', '$2y$10$aqQxvrw5Tc01guZc7BJTsufIQmUDxEtBBhhMiuiU.lKdYgHmbLoWm', 1, NULL, '2023-06-20 13:57:16');
+('admin', '$2y$10$mj2xIOWiQRH5.0wtyZRhZ.SPGMjVHly.m3nKf71Jmi2K5qJ2Ekv9C', 0, 7, '2023-06-17 16:27:25'),
+('test', '$2y$10$aqQxvrw5Tc01guZc7BJTsufIQmUDxEtBBhhMiuiU.lKdYgHmbLoWm', 1, 12, '2023-06-20 13:57:16');
 
 -- --------------------------------------------------------
 
@@ -243,8 +256,10 @@ CREATE TABLE `voting` (
 
 INSERT INTO `voting` (`id`, `target_type`, `target_id`, `voter`, `is_upvote`) VALUES
 (47, 1, 52, 'admin', 1),
-(53, 0, 23, 'test', 1),
-(54, 1, 13, 'test', 1);
+(69, 1, 4, 'test', 1),
+(70, 0, 27, 'test', 1),
+(71, 0, 27, 'admin', 1),
+(72, 1, 8, 'test', 0);
 
 --
 -- Indexes for dumped tables
@@ -306,19 +321,19 @@ ALTER TABLE `voting`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=57;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 
 --
 -- AUTO_INCREMENT for table `deleted`
 --
 ALTER TABLE `deleted`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `post`
@@ -330,7 +345,7 @@ ALTER TABLE `post`
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `tag`
@@ -342,7 +357,7 @@ ALTER TABLE `tag`
 -- AUTO_INCREMENT for table `voting`
 --
 ALTER TABLE `voting`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
