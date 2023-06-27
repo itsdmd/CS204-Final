@@ -15,6 +15,11 @@ class CommentCtrl extends Controller {
         $cmtmdl->deleteComment($comment_id, $deleter);
     }
 
+    public function fetchCommentById($id) {
+        $cmtmdl = new Comment($this->conn);
+        return $cmtmdl->fetchCommentById($id);
+    }
+
     public function fetchAllCommentsByTargetId($type, $id) {
         $cmtmdl = new Comment($this->conn);
         $result = $cmtmdl->fetchAllCommentsByTargetId($type, $id);
@@ -23,7 +28,7 @@ class CommentCtrl extends Controller {
         return $deletedCtrl->filterOutHiddenItems(1, $result);
     }
 
-    public function generateCommentChain($comment, $current_level) {
+    public function generateCommentChain($comment, $current_level, $reply_to) {
         $voteCtrl = new VotingCtrl();
         $upvote_existed = $voteCtrl->voteExisted(1, $comment["id"], $_SESSION["username"], true);
         $downvote_existed = $voteCtrl->voteExisted(1, $comment["id"], $_SESSION["username"], false);
@@ -33,9 +38,15 @@ class CommentCtrl extends Controller {
 
         $html  = "<div class='flex-grow-1 pl-3 border-info border-left' style='border-width: 5px; margin-left: " . ($current_level * 20) . "px;'>";
 
-        $html .= "  <p><b>" . $comment["author"] . "</b> <i class='text-secondary'>said:</i></p>";
+        $html .= "  <p><b>" . $comment["author"] . "</b> ";
+        if ($current_level == 0) {
+            $html .= "<i class='text-secondary'>commented:</i>";
+        } else {
+            $html .= "<i class='text-secondary'>replied to #" . $reply_to . ":</i>";
+        }
+        "</p>";
         $html .= "  <p>" . $comment["content"] . "</p>";
-        $html .= "  <p class='text-secondary'><i>on</i> " . $comment["date_created"] . "</p>";
+        $html .= "  <p class='text-secondary'><i>on</i> " . $comment["date_created"] . "&nbsp;&nbsp;|&nbsp;#" . $comment["id"] . "</p>";
 
         // reply form
         $exploded_url = explode("/", $_GET["url"]);
@@ -164,7 +175,11 @@ class CommentCtrl extends Controller {
 
 
         foreach ($this->fetchAllCommentsByTargetId(1, $comment["id"]) as $reply) {
-            $html .= $this->generateCommentChain($reply, $current_level + 1);
+            $html .= $this->generateCommentChain(
+                $reply,
+                $current_level + 1,
+                $comment["id"]
+            );
         }
 
         return $html;
@@ -174,7 +189,7 @@ class CommentCtrl extends Controller {
         $cmtCtrl = new CommentCtrl();
         $url_exploded = explode("/", $_GET["url"]);
         foreach ($cmtCtrl->fetchAllCommentsByTargetId(0, end($url_exploded)) as $comment) {
-            echo $cmtCtrl->generateCommentChain($comment, 0);
+            echo $cmtCtrl->generateCommentChain($comment, 0, end($url_exploded));
         }
     }
 }

@@ -7,6 +7,16 @@ class Comment {
         $this->conn = $conn;
     }
 
+    public function fetchCommentById($comment_id) {
+        $sql = "SELECT * FROM comment WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $comment_id);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+
+        return $result;
+    }
+
     public function fetchAllCommentsByTargetId($type, $id) {
         // $type: 0: post, 1: comment
         $sql = "SELECT * FROM comment WHERE reply_to = ? AND type = ?";
@@ -24,6 +34,7 @@ class Comment {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssss", $author, $type, $reply_to, $content);
         $stmt->execute();
+        $stmt->close();
     }
 
     public function deleteComment($comment_id, $deleter) {
