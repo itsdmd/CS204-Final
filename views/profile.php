@@ -44,10 +44,6 @@ include "views/includes/header.php";
                                             file</label>
                                         <input class="form-control" type="file" id="formFile" name="file">
                                     </div>
-                                    <div class="mb-3">
-                                        <label for="avatarUrl" class="form-label">Image URL</label>
-                                        <input class="form-control" type="text" id="avatarUrl" name="avatarUrl">
-                                    </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                                         <button type="submit" class="btn btn-info">Submit</button>

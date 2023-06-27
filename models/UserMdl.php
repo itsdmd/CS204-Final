@@ -78,9 +78,23 @@ class User {
     }
 
     public function setUserAvatar($file_id) {
+        // save the current media id to delete after the new one is set
+        $old_file_id = $this->getUserAvatarId($this->username);
+
         $sql = "UPDATE user SET avatar_id = ? WHERE username = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("is", $file_id, $this->username);
+        $stmt->execute();
+        $stmt->close();
+
+        // delete the old avatar from the filesystem
+        $mediaCtrl = new MediaCtrl();
+        unlink("img/uploads/" . $mediaCtrl->getFilePathById($old_file_id));
+
+        // delete the old avatar entry from the database
+        $sql = "DELETE FROM media WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $old_file_id);
         $stmt->execute();
         $stmt->close();
     }

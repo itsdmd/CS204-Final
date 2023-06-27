@@ -135,7 +135,7 @@ $report_existed = $reportCtrl->reportExisted($post["id"], $_SESSION["username"])
     </div>
 
     <!-- comment section -->
-    <div class="row mt-5">
+    <div class="row mt-5 d-flex flex-column">
         <div class="col-12">
             <h3>Comments</h3>
             <hr>

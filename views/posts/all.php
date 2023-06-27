@@ -45,8 +45,7 @@
             <div class="card-body">
                 <h5 class="card-title"><?= $post['title']; ?></h5>
                 <h6 class="card-subtitle mb-2 text-muted">
-                    <i>by </i>
-                    &nbsp;&nbsp;
+                    &nbsp;
                     <img src="<?php
                                 $userCtrl = new UserCtrl();
                                 if ($userCtrl->getUserAvatarId($post["author"])) {
@@ -56,6 +55,7 @@
                                 }
                                 ?>" alt="avatar" width="20" height="20" class="rounded-circle">
                     <b><?= $post['author']; ?></b>
+                    &nbsp;&nbsp;
                     |
                     &nbsp;&nbsp;
                     <i>on </i>
