@@ -17,10 +17,15 @@ Router::get("login", function () {
 });
 
 Router::post("login", function () {
-    // if (isset($_SESSION["status"])) {
-    //     header("Location: " . ROOT . "login");
-    //     exit();
-    // }
+    if (isset($_SESSION["role"]) && $_SESSION["role"] != "-1") {
+        header("Location: " . ROOT . "profile");
+        exit();
+    }
+
+    if (isset($_SESSION["status"])) {
+        header("Location: " . ROOT . "login");
+        exit();
+    }
 
     $user = new UserCtrl();
     $user->userLogin();
@@ -154,17 +159,18 @@ Router::post("comments/voting", function () {
 });
 
 Router::post("upload/avatar", function () {
-    if (!isset($_FILES["file"])) {
+    if (!isset($_FILES["file"]) && !isset($_FILES["avatarUrl"])) {
         header("Location: " . ROOT . "profile");
         exit();
+    } else if (isset($_FILES["file"])) {
+        $uploadCtrl = new MediaCtrl();
+        $file_name = $uploadCtrl->uploadMedia();
+        $file_id = $uploadCtrl->getFileIdByPath($file_name);
+
+        $userCtrl = new UserCtrl();
+        $userCtrl->setUserAvatar($_SESSION["username"], $file_id);
+    } else if (isset($_FILES["avatarUrl"])) {
     }
-
-    $uploadCtrl = new MediaCtrl();
-    $file_name = $uploadCtrl->uploadMedia();
-    $file_id = $uploadCtrl->getFileIdByPath($file_name);
-
-    $userCtrl = new UserCtrl();
-    $userCtrl->setUserAvatar($_SESSION["username"], $file_id);
 
     header("Location: " . ROOT . "profile");
 });

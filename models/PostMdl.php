@@ -9,7 +9,7 @@ class Post {
 
     public function fetchPostById($id) {
         $deletedCtrl = new DeletedCtrl();
-        if ($deletedCtrl->itemIsDeleted(0, $id)) {
+        if ($deletedCtrl->itemIsHidden(0, $id)) {
             return [];
         }
 

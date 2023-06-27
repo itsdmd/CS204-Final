@@ -43,15 +43,22 @@ include "views/includes/header.php";
                                         <label for="formFile" class="form-label">Upload
                                             file</label>
                                         <input class="form-control" type="file" id="formFile" name="file">
-                                    </div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="avatarUrl" class="form-label">Image URL</label>
+                                        <input class="form-control" type="text" id="avatarUrl" name="avatarUrl">
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="submit" class="btn btn-info">Submit</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 

@@ -36,16 +36,7 @@ class CommentCtrl extends Controller {
         $reportCtrl = new ReportCtrl();
         $report_existed = $reportCtrl->reportExisted($comment["id"], $_SESSION["username"]);
 
-        $html  = "<div class='col-12 border-info border-left";
-        if ($current_level < 0) {
-            $current_level = 0;
-        }
-        if ($current_level >= 0 && $current_level < 5) {
-            $html .= " ml-" . ($current_level);
-        } else {
-            $html .= " ml-5";
-        }
-        $html .= "'>";
+        $html  = "<div class='col-12 border-info border-left' style='border-width: 5px; margin-left: " . ($current_level * 20) . "px;'>";
 
         $html .= "  <p><b>" . $comment["author"] . "</b> <i class='text-secondary'>said:</i></p>";
         $html .= "  <p>" . $comment["content"] . "</p>";
@@ -69,7 +60,7 @@ class CommentCtrl extends Controller {
             $html .= "  </div>";
         }
 
-        $html .= "</div>";
+        // $html .= "</div>";
 
 
 
@@ -141,6 +132,7 @@ class CommentCtrl extends Controller {
             $html .= "  </form>";
         }
 
+        $html .= "</div>";
         $html .= "</div>";
 
 

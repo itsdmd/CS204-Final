@@ -7,14 +7,21 @@ class Deleted {
         $this->conn = $conn;
     }
 
-    public function deleteItem($type, $id, $deleted_by) {
+    public function hideItem($type, $id, $deleted_by) {
         $sql = "INSERT INTO deleted (type, target_id, deleted_by) VALUES (?, ?, ?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("sss", $type, $id, $deleted_by);
         $stmt->execute();
     }
 
-    public function itemIsDeleted($type, $id) {
+    public function deleteItem($type, $id) {
+        $sql = "DELETE FROM deleted WHERE type = ? AND target_id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $type, $id);
+        $stmt->execute();
+    }
+
+    public function itemIsHidden($type, $id) {
         $sql = "SELECT * FROM deleted WHERE type = ? AND target_id = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $type, $id);
