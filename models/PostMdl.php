@@ -49,11 +49,11 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post ORDER BY date_created DESC, title ASC WHERE author = ? LIMIT 99999999 OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author = ? ORDER BY date_created DESC, title ASC LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("si", $_SESSION["username"], $offset);
         } else {
-            $sql = "SELECT * FROM post ORDER BY date_created DESC, title ASC WHERE author = ? LIMIT ? OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author = ? ORDER BY date_created DESC, title ASC LIMIT ? OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
         }
