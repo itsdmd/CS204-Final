@@ -23,7 +23,7 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
         <div class="container">
             <div class="row">
                 <div class="col-12">
-                    <img src="<?= ROOT ?>/img/uploads/<?= $mediaPath ?>" alt="" style="object-fit: cover; max-height: 200px; width: 100%; overflow: hidden;">
+                    <img src="<?= ROOT ?>/img/uploads/<?= $mediaPath ?>" alt="" style="object-fit: cover; max-height: 500px; width: 100%; overflow: hidden;">
                 </div>
             </div>
         </div>

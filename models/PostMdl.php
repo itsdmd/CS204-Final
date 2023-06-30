@@ -28,7 +28,7 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post LIMIT 99999999 OFFSET ?";
+            $sql = "SELECT * FROM post ORDER BY date_created DESC, title ASC LIMIT 99999999 OFFSET ? ORDER BY id DESC";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("i", $offset);
         } else {
@@ -49,11 +49,11 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post WHERE author = ? LIMIT 99999999 OFFSET ?";
+            $sql = "SELECT * FROM post ORDER BY date_created DESC, title ASC WHERE author = ? LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("si", $_SESSION["username"], $offset);
         } else {
-            $sql = "SELECT * FROM post WHERE author = ? LIMIT ? OFFSET ?";
+            $sql = "SELECT * FROM post ORDER BY date_created DESC, title ASC WHERE author = ? LIMIT ? OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
         }
@@ -70,11 +70,11 @@ class Post {
         $limit = intval($limit);
 
         if ($limit == -1) {
-            $sql = "SELECT * FROM post WHERE author != ? LIMIT 99999999 OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author != ? ORDER BY date_created DESC, title ASC LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("si", $_SESSION["username"], $offset);
         } else {
-            $sql = "SELECT * FROM post WHERE author != ? LIMIT ? OFFSET ?";
+            $sql = "SELECT * FROM post WHERE author != ? ORDER BY date_created DESC, title ASC LIMIT ? OFFSET ?";
             $stmt = $this->conn->prepare($sql);
             $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
         }
@@ -86,7 +86,7 @@ class Post {
     }
 
     public function fetchPostsByMatched($type, $needle) {
-        $sql = "SELECT * FROM post WHERE author != ? AND LOWER(" . $type . ") LIKE LOWER('%" . $needle . "%')";
+        $sql = "SELECT * FROM post WHERE author != ? AND LOWER(" . $type . ") LIKE LOWER('%" . $needle . "%') ORDER BY date_created DESC, title ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $_SESSION["username"]);
         $stmt->execute();
@@ -97,14 +97,14 @@ class Post {
     }
 
     public function setPostMedia($id, $media) {
-        $sql = "UPDATE post SET media_id = ? WHERE id = ?";
+        $sql = "UPDATE post SET media_id = ? WHERE id = ? ORDER BY date_created DESC, title ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ss", $media, $id);
         $stmt->execute();
     }
 
     public function getPostMediaId($post_id) {
-        $sql = "SELECT media_id FROM post WHERE id = ?";
+        $sql = "SELECT media_id FROM post WHERE id = ? ORDER BY date_created DESC, title ASC";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("s", $post_id);
         $stmt->execute();

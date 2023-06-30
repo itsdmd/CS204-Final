@@ -10,17 +10,21 @@
     <!-- Search bar -->
     <div class="row">
         <div class="col-md-12">
-            <form class="form-inline" action="<?= ROOT ?>posts/search" method="get">
-                <select name="type" id="search-type" class="btn btn-outline-secondary dropdown-toggle mr-2">
+            <form class="form-inline" action="<?= ROOT ?>posts/search"
+                method="get">
+                <select name="type" id="search-type"
+                    class="btn btn-outline-secondary dropdown-toggle mr-2">
                     <option value="title">Title</option>
                     <option value="author">Author</option>
                     <option value="content">Content</option>
                     <option value="tags">Tags</option>
                 </select>
 
-                <input type="text" name="needle" class="form-control" placeholder="Search...">
+                <input type="text" name="needle" class="form-control"
+                    placeholder="Search...">
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    <button class="btn btn-outline-secondary" type="submit"><i
+                            class="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </form>
         </div>
@@ -44,20 +48,21 @@
     }
 
     foreach ($posts as $post) : ?>
-
-        <div class="card m-4">
+    <div class="d-flex align-items-center justify-content-around">
+        <div class="card mt-4 mb-4 ml-1 flex-grow-1">
             <div class="card-body">
                 <h5 class="card-title"><?= $post['title']; ?></h5>
                 <h6 class="card-subtitle mb-2 text-muted">
                     &nbsp;
                     <img src="<?php
-                                $userCtrl = new UserCtrl();
-                                if ($userCtrl->getUserAvatarId($post["author"])) {
-                                    echo ROOT . 'img/uploads/' . $userCtrl->getUserAvatarPath($post["author"]);
-                                } else {
-                                    echo ROOT . 'img/default_avatar.png"';
-                                }
-                                ?>" alt="avatar" width="20" height="20" class="rounded-circle">
+                                    $userCtrl = new UserCtrl();
+                                    if ($userCtrl->getUserAvatarId($post["author"])) {
+                                        echo ROOT . 'img/uploads/' . $userCtrl->getUserAvatarPath($post["author"]);
+                                    } else {
+                                        echo ROOT . 'img/default_avatar.png"';
+                                    }
+                                    ?>" alt="avatar" width="20" height="20"
+                        class="rounded-circle">
                     <b><?= $post['author']; ?></b>
                     &nbsp;&nbsp;
                     |
@@ -67,31 +72,45 @@
                 </h6>
                 <hr>
                 <p class="card-text"><?php
-                                        // show only first 100 characters of the post content
-                                        $content = $post['content'];
-                                        if (strlen($content) > 100) {
-                                            $content = substr($content, 0, 100) . "...";
-                                        }
-                                        echo $content;
-                                        ?></p>
+                                            // show only first 100 characters of the post content
+                                            $content = $post['content'];
+                                            if (strlen($content) > 100) {
+                                                $content = substr($content, 0, 100) . "...";
+                                            }
+                                            echo $content;
+                                            ?></p>
                 <div class="d-flex">
-                    <button class="btn btn-info mr-2" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
+                    <button class="btn btn-info mr-2" type="button"
+                        onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
                         <i class="fa-solid fa-eye"></i>
                         <b>Read</b>
                     </button>
                     <!-- delete button if current user has role=0 -->
                     <?php if ($_SESSION['role'] == 0) : ?>
-                        <form action="<?= ROOT; ?>posts/delete" method="post">
-                            <input type="hidden" name="post-id" value="<?= $post['id']; ?>">
-                            <button class="btn btn-outline-danger" type="submit">
-                                <i class="fa-solid fa-trash"></i>
-                                <b>Delete</b>
-                            </button>
-                        </form>
+                    <form action="<?= ROOT; ?>posts/delete" method="post">
+                        <input type="hidden" name="post-id"
+                            value="<?= $post['id']; ?>">
+                        <button class="btn btn-outline-danger" type="submit">
+                            <i class="fa-solid fa-trash"></i>
+                            <b>Delete</b>
+                        </button>
+                    </form>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
+
+        <?php
+            $postCtrl = new PostCtrl();
+
+            if ($postCtrl->getPostMediaId($post["id"]) != null) {
+                $mediaCtrl = new MediaCtrl();
+                $mediaPath = $mediaCtrl->getFilePathById($postCtrl->getPostMediaId($post["id"]));
+            ?>
+        <img src="<?= ROOT ?>img/uploads/<?= $mediaPath ?>"
+            style="width: 200px; height: 200px; overflow: hidden; object-fit: content;">
+        <?php } ?>
+    </div>
 
     <?php endforeach; ?>
 
@@ -110,11 +129,12 @@
             $pagesCount = ceil(count($allPosts) / 10);
 
             for ($i = 1; $i <= $pagesCount; $i++) : ?>
-                <li class="page-item <?php if ($page == $i) {
+            <li class="page-item <?php if ($page == $i) {
                                             echo "active";
                                         } ?>">
-                    <a class="page-link" href="<?= ROOT; ?>posts/page/<?= $i; ?>"><?= $i; ?></a>
-                </li>
+                <a class="page-link"
+                    href="<?= ROOT; ?>posts/page/<?= $i; ?>"><?= $i; ?></a>
+            </li>
             <?php endfor; ?>
         </ul>
     </nav>
