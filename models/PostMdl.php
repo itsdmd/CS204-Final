@@ -96,6 +96,23 @@ class Post {
         return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
+    public function setPostMedia($id, $media) {
+        $sql = "UPDATE post SET media_id = ? WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $media, $id);
+        $stmt->execute();
+    }
+
+    public function getPostMediaId($post_id) {
+        $sql = "SELECT media_id FROM post WHERE id = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $post_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc()["media_id"];
+    }
+
     public function createPost($title, $content, $author, $tags) {
         $sql = "INSERT INTO post (title, content, author, tags) VALUES (?, ?, ?, ?)";
         $stmt = $this->conn->prepare($sql);

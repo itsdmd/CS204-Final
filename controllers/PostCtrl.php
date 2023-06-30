@@ -22,28 +22,38 @@ class PostCtrl extends Controller {
     }
 
     public function fetchPostById($id) {
-        $postCtrl = new Post($this->conn);
-        return $postCtrl->fetchPostById($id);
+        $postMdl = new Post($this->conn);
+        return $postMdl->fetchPostById($id);
     }
 
     public function fetchAllPosts($offset, $limit) {
-        $postCtrl = new Post($this->conn);
-        return $postCtrl->fetchAllPosts($offset, $limit);
+        $postMdl = new Post($this->conn);
+        return $postMdl->fetchAllPosts($offset, $limit);
     }
 
     public function fetchAllPostsByCurrentUser($offset, $limit) {
-        $postCtrl = new Post($this->conn);
-        return $postCtrl->fetchAllPostsByCurrentUser($offset, $limit);
+        $postMdl = new Post($this->conn);
+        return $postMdl->fetchAllPostsByCurrentUser($offset, $limit);
     }
 
     public function fetchAllPostsNotByCurrentUser($offset, $limit) {
-        $postCtrl = new Post($this->conn);
-        return $postCtrl->fetchAllPostsNotByCurrentUser($offset, $limit);
+        $postMdl = new Post($this->conn);
+        return $postMdl->fetchAllPostsNotByCurrentUser($offset, $limit);
     }
 
     public function searchPosts($type, $needle) {
-        $postCtrl = new Post($this->conn);
-        return $postCtrl->fetchPostsByMatched($type, $needle);
+        $postMdl = new Post($this->conn);
+        return $postMdl->fetchPostsByMatched($type, $needle);
+    }
+
+    public function setPostMedia($post_id, $media_id) {
+        $postMdl = new Post($this->conn);
+        $postMdl->setPostMedia($post_id, $media_id);
+    }
+
+    public function getPostMediaId($post_id) {
+        $postMdl = new Post($this->conn);
+        return $postMdl->getPostMediaId($post_id);
     }
 
     public function createPost() {

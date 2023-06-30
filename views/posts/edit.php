@@ -19,8 +19,13 @@ $post = $postCtrl->fetchPostById(end($url_exploded));
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="<?= ROOT; ?>posts/edit" method="post">
+            <form action="<?= ROOT; ?>posts/edit" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
+                <div class="form-group">
+                    <label for="file" class="form-label">
+                        <i class="fas fa-image"></i> Upload</label>
+                    <input class="form-control" type="file" id="file" name="file">
+                </div>
                 <div class="form-group">
                     <label for="post-title">Title</label>
                     <input type="text" class="form-control" id="post-title" name="post-title" placeholder="Enter post title" value="<?= $post["title"] ?>">

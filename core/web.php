@@ -83,6 +83,15 @@ Router::get("posts/edit/{id}", function () {
 Router::post("posts/edit", function () {
     $post = new PostCtrl();
     $post->editPost($_POST["post-id"]);
+
+    if (isset($_FILES["file"])) {
+        $mediaCtrl = new MediaCtrl();
+        $filePath = $mediaCtrl->uploadMedia();
+        $fileId = $mediaCtrl->getFileIdByPath($filePath);
+
+        $post->setPostMedia($_POST["post-id"], $fileId);
+    }
+
     header("Location: " . ROOT . "profile");
 });
 

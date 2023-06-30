@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 27, 2023 at 01:19 PM
+-- Generation Time: Jun 29, 2023 at 01:43 PM
 -- Server version: 8.0.33
 -- PHP Version: 8.1.20
 
@@ -269,49 +269,67 @@ INSERT INTO `voting` (`id`, `target_type`, `target_id`, `voter`, `is_upvote`) VA
 -- Indexes for table `comment`
 --
 ALTER TABLE `comment`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `author` (`author`,`reply_to`),
+  ADD KEY `id_2` (`id`,`author`,`reply_to`);
 
 --
 -- Indexes for table `deleted`
 --
 ALTER TABLE `deleted`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `target_id` (`target_id`,`deleted_by`),
+  ADD KEY `deleted_by` (`deleted_by`);
 
 --
 -- Indexes for table `media`
 --
 ALTER TABLE `media`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`);
 
 --
 -- Indexes for table `post`
 --
 ALTER TABLE `post`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `author` (`author`),
+  ADD KEY `media_id` (`media_id`);
 
 --
 -- Indexes for table `report`
 --
 ALTER TABLE `report`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `target_id` (`target_id`,`reporter`),
+  ADD KEY `reporter` (`reporter`);
 
 --
 -- Indexes for table `tag`
 --
 ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`);
 
 --
 -- Indexes for table `user`
 --
 ALTER TABLE `user`
-  ADD PRIMARY KEY (`username`);
+  ADD PRIMARY KEY (`username`),
+  ADD KEY `username` (`username`);
 
 --
 -- Indexes for table `voting`
 --
 ALTER TABLE `voting`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id` (`id`),
+  ADD KEY `target_id` (`target_id`,`voter`),
+  ADD KEY `voter` (`voter`);
 
 --
 -- AUTO_INCREMENT for dumped tables
