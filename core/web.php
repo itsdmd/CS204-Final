@@ -222,6 +222,18 @@ Router::post("upload/avatar", function () {
     header("Location: " . ROOT . "profile");
 });
 
+Router::post("users/delete", function () {
+    if ($_SESSION["role"] != 0) {
+        header("Location: " . ROOT . "profile");
+        exit();
+    }
+
+    $userCtrl = new UserCtrl();
+    $userCtrl->deleteUser($_POST["username"]);
+
+    header("Location: " . ROOT . "profile");
+});
+
 if (Router::$found === false) {
     include "views/_404.php";
 }
