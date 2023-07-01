@@ -15,7 +15,7 @@ class Post {
 
         $sql = "SELECT * FROM post WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("s", $id);
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -43,7 +43,7 @@ class Post {
         return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
-    public function fetchAllPostsByCurrentUser($offset, $limit) {
+    public function fetchAllPostsByUsername($username, $offset, $limit) {
         $offset = intval($offset);
         $offset = $offset * 5;
         $limit = intval($limit);
@@ -51,11 +51,11 @@ class Post {
         if ($limit == -1) {
             $sql = "SELECT * FROM post WHERE author = ? ORDER BY date_created DESC, title ASC LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("si", $_SESSION["username"], $offset);
+            $stmt->bind_param("si", $username, $offset);
         } else {
             $sql = "SELECT * FROM post WHERE author = ? ORDER BY date_created DESC, title ASC LIMIT ? OFFSET ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
+            $stmt->bind_param("sii", $username, $limit, $offset);
         }
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -64,7 +64,7 @@ class Post {
         return $deletedCtrl->filterOutHiddenItems(0, $results);
     }
 
-    public function fetchAllPostsNotByCurrentUser($offset, $limit) {
+    public function fetchAllPostsNotByUsername($username, $offset, $limit) {
         $offset = intval($offset);
         $offset = $offset * 5;
         $limit = intval($limit);
@@ -72,11 +72,11 @@ class Post {
         if ($limit == -1) {
             $sql = "SELECT * FROM post WHERE author != ? ORDER BY date_created DESC, title ASC LIMIT 99999999 OFFSET ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("si", $_SESSION["username"], $offset);
+            $stmt->bind_param("si", $username, $offset);
         } else {
             $sql = "SELECT * FROM post WHERE author != ? ORDER BY date_created DESC, title ASC LIMIT ? OFFSET ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("sii", $_SESSION["username"], $limit, $offset);
+            $stmt->bind_param("sii", $username, $limit, $offset);
         }
         $stmt->execute();
         $results = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
@@ -94,6 +94,16 @@ class Post {
 
         $deletedCtrl = new DeletedCtrl();
         return $deletedCtrl->filterOutHiddenItems(0, $results);
+    }
+
+    public function countPostsByUsername($username) {
+        $sql = "SELECT COUNT(*) FROM post WHERE author = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        return $result->fetch_assoc()["COUNT(*)"];
     }
 
     public function setPostMedia($id, $media) {

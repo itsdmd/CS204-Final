@@ -31,14 +31,19 @@ class PostCtrl extends Controller {
         return $postMdl->fetchAllPosts($offset, $limit);
     }
 
-    public function fetchAllPostsByCurrentUser($offset, $limit) {
+    public function fetchAllPostsByUsername($username, $offset, $limit) {
         $postMdl = new Post($this->conn);
-        return $postMdl->fetchAllPostsByCurrentUser($offset, $limit);
+        return $postMdl->fetchAllPostsByUsername($username, $offset, $limit);
     }
 
-    public function fetchAllPostsNotByCurrentUser($offset, $limit) {
+    public function fetchAllPostsNotByUsername($username, $offset, $limit) {
         $postMdl = new Post($this->conn);
-        return $postMdl->fetchAllPostsNotByCurrentUser($offset, $limit);
+        return $postMdl->fetchAllPostsNotByUsername($username, $offset, $limit);
+    }
+
+    public function countPostsByUsername($username) {
+        $postMdl = new Post($this->conn);
+        return $postMdl->countPostsByUsername($username);
     }
 
     public function searchPosts($type, $needle) {

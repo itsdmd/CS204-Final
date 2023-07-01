@@ -1,0 +1,19 @@
+{
+	"files": [
+		{
+			"path": "views/profile.php",
+			"bookmarks": [
+				{
+					"line": 70,
+					"column": 21,
+					"label": ""
+				},
+				{
+					"line": 151,
+					"column": 36,
+					"label": ""
+				}
+			]
+		}
+	]
+}

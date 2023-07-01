@@ -74,16 +74,16 @@ class CommentCtrl extends Controller {
 
         // voting count
         $voteCtrl = new VotingCtrl();
-        $vote_count = $voteCtrl->votingScore(1, $comment["id"]);
+        $voting_score = $voteCtrl->votingScore(1, $comment["id"]);
         $html .= "  <p class='text-";
-        if ($vote_count > 0) {
+        if ($voting_score > 0) {
             $html .= "success";
-        } else if ($vote_count < 0) {
+        } else if ($voting_score < 0) {
             $html .= "danger";
         } else {
             $html .= "secondary";
         }
-        $html .= "' ><b>" . $vote_count . "</b> points</p>";
+        $html .= "' ><b>" . $voting_score . "</b> points</p>";
 
         if (isset($_SESSION['role']) && ($_SESSION['role'] != '-1')) {
             // voting buttons

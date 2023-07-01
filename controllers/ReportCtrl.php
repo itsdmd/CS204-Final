@@ -20,6 +20,11 @@ class ReportCtrl extends Controller {
         return $rptmdl->reportExisted($post_id, $comment_id, $reporter);
     }
 
+    public function getReportsByTargetId($type, $target_id) {
+        $rptmdl = new Report($this->conn);
+        return $rptmdl->getReportsByTargetId($type, $target_id);
+    }
+
     public function countReportsByTargetId($type, $target_id) {
         $rptmdl = new Report($this->conn);
         return $rptmdl->countReportsByTargetId($type, $target_id);

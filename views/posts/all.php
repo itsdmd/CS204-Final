@@ -31,16 +31,24 @@
     $postsCtrl = new PostCtrl();
     $posts = null;
 
-    if (isset($_POST["ids"]) && is_array($_POST["ids"]) && count($_POST["ids"]) > 0) {
-        foreach ($_POST["ids"] as $id) {
-            $posts[] = $postsCtrl->fetchPostById($id);
+    if (isset($_POST["ids"])) {
+        // check type of $_POST["ids"]. if array then fetch all posts by id. if string, convert to array of int and fetch all posts by id
+        if (!is_array($_POST["ids"])) {
+            $ids = explode(",", $_POST["ids"]);
+            foreach ($ids as $id) {
+                $posts[] = $postsCtrl->fetchPostById($id);
+            }
+        } else {
+            foreach ($_POST["ids"] as $id) {
+                $posts[] = $postsCtrl->fetchPostById($id);
+            }
         }
     } else {
         // page number is the last part of the URL
         $url_parts = explode("/", $_SERVER["REQUEST_URI"]);
         // convert to int
         $page = intval(end($url_parts));
-        $posts = $postsCtrl->fetchAllPostsNotByCurrentUser($page - 1, 5);
+        $posts = $postsCtrl->fetchAllPostsNotByUsername($_SESSION["username"], $page - 1, 5);
     }
 
     foreach ($posts as $post) : ?>
@@ -113,7 +121,7 @@
             $url = $_SERVER["REQUEST_URI"];
 
             if (str_contains($url, "page")) {
-                $allPosts = $postsCtrl->fetchAllPostsNotByCurrentUser(0, -1);
+                $allPosts = $postsCtrl->fetchAllPostsNotByUsername($_SESSION["username"], 0, -1);
             } else {
                 $allPosts = array();
             }

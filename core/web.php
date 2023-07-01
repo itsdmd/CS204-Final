@@ -54,6 +54,11 @@ Router::get("posts", function () {
     header("Location: " . ROOT . "posts/page/1");
 });
 
+Router::post("posts", function () {
+    $postCtrl = new PostCtrl();
+    $postCtrl->viewPostsPage();
+});
+
 Router::get("posts/page/{page}", function () {
     $postCtrl = new PostCtrl();
     $postCtrl->viewPostsPage();

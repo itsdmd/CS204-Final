@@ -9,7 +9,7 @@ $mediaCtrl = new MediaCtrl();
 $mediaPath = $mediaCtrl->getFilePathById($postCtrl->getPostMediaId($post["id"]));
 
 $votingCtrl = new VotingCtrl();
-$vote_count = $votingCtrl->votingScore($post["id"], NULL);
+$voting_score = $votingCtrl->votingScore($post["id"], NULL);
 $upvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["username"], 1);
 $downvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["username"], 0);
 
@@ -93,8 +93,8 @@ $report_existed = $reportCtrl->reportExisted($post["id"], NULL, $_SESSION["usern
             <!-- Voting -->
             <div class="d-flex gap-1">
                 <b>
-                    <p class="text-<?= ($vote_count > 0) ? "success" : (($vote_count == 0) ? "secondary" : "danger") ?> mr-4">
-                        <?= $vote_count ?> points</p>
+                    <p class="text-<?= ($voting_score > 0) ? "success" : (($voting_score == 0) ? "secondary" : "danger") ?> mr-4">
+                        <?= $voting_score ?> points</p>
                 </b>
                 <!-- voting buttons -->
                 <?php if (isset($_SESSION["role"]) && ($_SESSION["role"] != "-1")) : ?>

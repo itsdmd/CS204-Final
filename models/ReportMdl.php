@@ -71,18 +71,45 @@ class Report {
         return $result->num_rows > 0;
     }
 
-    public function countReportsByTargetId($type, $target_id) {
+    public function getReportsByTargetId($type, $target_id) {
+        // 0: post, 1: comment, 2: user's posts, 3: user's comments, 4: user's posts and comments
+
         if ($type == 0) {
             $sql = "SELECT * FROM report WHERE post_id = ?";
-        } else {
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $target_id);
+        } else if ($type == 1) {
             $sql = "SELECT * FROM report WHERE comment_id = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("i", $target_id);
+        } else if ($type == 2) {
+            // reports of posts of a user
+            // join with "post" table to get the "author" of the post
+            $sql = "SELECT report.post_id FROM report JOIN post ON report.post_id = post.id WHERE post.author = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $target_id);
+        } else if ($type == 3) {
+            // reports of comments of a user
+            // join with "comment" table to get the "author" of the comment
+            $sql = "SELECT report.comment_id FROM report JOIN comment ON report.comment_id = comment.id WHERE comment.author = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("s", $target_id);
+        } else if ($type == 4) {
+            // reports of both posts and comments of a user
+            // join with "post" and "comment" table to get the "author" of the post/comment
+            $sql = "SELECT report.post_id FROM report JOIN post ON report.post_id = post.id WHERE post.author = ? UNION SELECT report.comment_id FROM report JOIN comment ON report.comment_id = comment.id WHERE comment.author = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ss", $target_id, $target_id);
         }
-
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("i", $target_id);
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
+
+        return $result;
+    }
+
+    public function countReportsByTargetId($type, $target_id) {
+        $result = $this->getReportsByTargetId($type, $target_id);
 
         return $result->num_rows;
     }

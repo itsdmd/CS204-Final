@@ -17,6 +17,16 @@ class UserCtrl extends Controller {
         include "views/login.php";
     }
 
+    public function getAllUsers() {
+        $user = new User($this->conn);
+        return $user->getAllUsers();
+    }
+
+    public function deleteUser($username) {
+        $user = new User($this->conn);
+        $user->deleteUser($username);
+    }
+
     public function userLogin() {
         $user = new User($this->conn);
         $user->username = $this->req["login-username"];

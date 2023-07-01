@@ -32,6 +32,28 @@ class User {
         }
     }
 
+    public function getAllUsers() {
+        $sql = "SELECT * FROM user";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+        return $result;
+    }
+
+    public function deleteUser($username) {
+        $sql = "DELETE FROM user WHERE username = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+
+        if ($stmt->affected_rows === 1) {
+            header("Location: " . ROOT . "profile");
+        }
+
+        $stmt->close();
+    }
+
     public function createNewUser() {
         $sql = "INSERT INTO user (username, password, role, avatar_id, date_created) VALUES (?, ?, ?, NULL, DEFAULT)";
         $stmt = $this->conn->prepare($sql);
