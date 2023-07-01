@@ -24,7 +24,7 @@ class Post {
 
     public function fetchAllPosts($offset, $limit) {
         $offset = intval($offset);
-        $offset = $offset * 10;
+        $offset = $offset * 5;
         $limit = intval($limit);
 
         if ($limit == -1) {
@@ -45,7 +45,7 @@ class Post {
 
     public function fetchAllPostsByCurrentUser($offset, $limit) {
         $offset = intval($offset);
-        $offset = $offset * 10;
+        $offset = $offset * 5;
         $limit = intval($limit);
 
         if ($limit == -1) {
@@ -66,7 +66,7 @@ class Post {
 
     public function fetchAllPostsNotByCurrentUser($offset, $limit) {
         $offset = intval($offset);
-        $offset = $offset * 10;
+        $offset = $offset * 5;
         $limit = intval($limit);
 
         if ($limit == -1) {
@@ -118,6 +118,16 @@ class Post {
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssss", $title, $content, $author, $tags);
         $stmt->execute();
+
+        // get the id of the post that was just created
+        $sql = "SELECT id FROM post WHERE title = ? AND content = ? AND author = ? AND tags = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssss", $title, $content, $author, $tags);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $id = $result->fetch_assoc()["id"];
+
+        return $id;
     }
 
     public function editPost($id, $title, $content, $tags) {

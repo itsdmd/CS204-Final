@@ -5,9 +5,9 @@ class CommentCtrl extends Controller {
         parent::__construct();
     }
 
-    public function addComment($author, $type, $reply_to, $content) {
+    public function addComment($author, $post_id, $replied_to, $content) {
         $cmtmdl = new Comment($this->conn);
-        $cmtmdl->addComment($author, $type, $reply_to, $content);
+        $cmtmdl->addComment($author, $post_id, $replied_to, $content);
     }
 
     public function deleteComment($comment_id, $deleter) {
@@ -28,13 +28,13 @@ class CommentCtrl extends Controller {
         return $deletedCtrl->filterOutHiddenItems(1, $result);
     }
 
-    public function generateCommentChain($comment, $current_level, $reply_to) {
+    public function generateCommentChain($comment, $current_level, $replied_to) {
         $voteCtrl = new VotingCtrl();
-        $upvote_existed = $voteCtrl->voteExisted(1, $comment["id"], $_SESSION["username"], true);
-        $downvote_existed = $voteCtrl->voteExisted(1, $comment["id"], $_SESSION["username"], false);
+        $upvote_existed = $voteCtrl->voteExisted(NULL, $comment["id"], $_SESSION["username"], true);
+        $downvote_existed = $voteCtrl->voteExisted(NULL, $comment["id"], $_SESSION["username"], false);
 
         $reportCtrl = new ReportCtrl();
-        $report_existed = $reportCtrl->reportExisted(1, $comment["id"], $_SESSION["username"]);
+        $report_existed = $reportCtrl->reportExisted(NULL, $comment["id"], $_SESSION["username"]);
 
         $html  = "<div class='flex-grow-1 pl-3 border-info border-left' style='border-width: 5px; margin-left: " . ($current_level * 20) . "px;'>";
 
@@ -42,7 +42,7 @@ class CommentCtrl extends Controller {
         if ($current_level == 0) {
             $html .= "<i class='text-secondary'>commented:</i>";
         } else {
-            $html .= "<i class='text-secondary'>replied to #" . $reply_to . ":</i>";
+            $html .= "<i class='text-secondary'>replied to #" . $replied_to . ":</i>";
         }
         "</p>";
         $html .= "  <p>" . $comment["content"] . "</p>";
@@ -57,7 +57,7 @@ class CommentCtrl extends Controller {
             $html .= "          <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
             $html .= "          <input type='hidden' name='author' value='" . $_SESSION["username"] . "'>";
             $html .= "          <input type='hidden' name='type' value='1'>";
-            $html .= "          <input type='hidden' name='reply_to' value='" . $comment["id"] . "'>";
+            $html .= "          <input type='hidden' name='replied_to' value='" . $comment["id"] . "'>";
             $html .= "          <input name='content' class='form-control' placeholder='Write a reply...'>";
 
             // submit reply button

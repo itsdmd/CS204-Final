@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 29, 2023 at 01:43 PM
+-- Generation Time: Jul 01, 2023 at 11:58 AM
 -- Server version: 8.0.33
 -- PHP Version: 8.1.20
 
@@ -30,8 +30,8 @@ SET time_zone = "+00:00";
 CREATE TABLE `comment` (
   `id` int NOT NULL,
   `author` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `type` int NOT NULL COMMENT '0: reply to post | 1: reply to comment',
-  `reply_to` int NOT NULL COMMENT 'ID of post/comment this entry is replying to',
+  `post_id` int NOT NULL COMMENT 'the post this comment belongs to',
+  `replied_to` int DEFAULT NULL COMMENT 'ID of post/comment this entry is replying to. NULL for top level comment.',
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -40,35 +40,14 @@ CREATE TABLE `comment` (
 -- Dumping data for table `comment`
 --
 
-INSERT INTO `comment` (`id`, `author`, `type`, `reply_to`, `content`, `date_created`) VALUES
-(1, 'John', 0, 25, 'Great post!', '2023-06-19 08:52:46'),
-(2, 'Jane', 1, 3, 'I completely agree.', '2023-06-19 08:52:46'),
-(3, 'Mark', 0, 27, 'Thanks for sharing!', '2023-06-19 08:52:46'),
-(4, 'Sara', 1, 2, 'Interesting point.', '2023-06-19 08:52:46'),
-(5, 'Mike', 0, 21, 'I have a question.', '2023-06-19 08:52:46'),
-(6, 'Emily', 1, 4, 'I disagree.', '2023-06-19 08:52:46'),
-(7, 'David', 0, 30, 'This is helpful.', '2023-06-19 08:52:46'),
-(8, 'Lisa', 1, 6, 'I have a similar experience.', '2023-06-19 08:52:46'),
-(9, 'Tom', 0, 29, 'I appreciate your insights.', '2023-06-19 08:52:46'),
-(10, 'Amy', 1, 8, 'I think you missed something.', '2023-06-19 08:52:46'),
-(11, 'Chris', 0, 22, 'Can you explain more?', '2023-06-19 08:52:46'),
-(12, 'Olivia', 1, 5, 'I have a different perspective.', '2023-06-19 08:52:46'),
-(13, 'Jake', 0, 23, 'This is well-written.', '2023-06-19 08:52:46'),
-(14, 'Rachel', 1, 7, 'I have a follow-up question.', '2023-06-19 08:52:46'),
-(15, 'Ben', 0, 24, 'I see your point.', '2023-06-19 08:52:46'),
-(16, 'Lily', 1, 1, 'I think you are mistaken.', '2023-06-19 08:52:46'),
-(17, 'Max', 0, 26, 'I have a suggestion.', '2023-06-19 08:52:46'),
-(18, 'Ava', 1, 10, 'I have a question about this.', '2023-06-19 08:52:46'),
-(19, 'Luke', 0, 28, 'This is a great resource.', '2023-06-19 08:52:46'),
-(20, 'Sophie', 1, 9, 'I found this very helpful.', '2023-06-19 08:52:46'),
-(21, 'Jane', 0, 27, 'That\'s awesome!', '2023-06-19 08:52:46'),
-(55, 'admin', 0, 21, 'test delete comment', '2023-06-24 08:49:34'),
-(56, 'test', 0, 21, 'Dope', '2023-06-24 09:14:12'),
-(57, 'admin', 1, 56, 'Test reply', '2023-06-26 18:31:44'),
-(58, 'test', 1, 5, 'test', '2023-06-27 13:32:47'),
-(59, 'test', 1, 12, 'replying to olivia', '2023-06-27 13:43:03'),
-(60, 'test', 1, 5, 'replying to mike', '2023-06-27 13:43:42'),
-(61, 'test', 1, 4, 'Test replying to Sara\'s comment.', '2023-06-27 18:12:34');
+INSERT INTO `comment` (`id`, `author`, `post_id`, `replied_to`, `content`, `date_created`) VALUES
+(127, 'test', 40, NULL, 'Comment 1', '2023-07-01 18:22:22'),
+(128, 'test', 40, 127, 'replying to comment 1', '2023-07-01 18:22:34'),
+(129, 'test', 40, NULL, 'Comment 2', '2023-07-01 18:25:42'),
+(130, 'test', 40, 129, 'replying to comment 2', '2023-07-01 18:25:57'),
+(131, 'test', 40, 130, 'testing nesting comment', '2023-07-01 18:26:00'),
+(132, 'test', 40, 129, 'second reply to comment 2', '2023-07-01 18:26:15'),
+(133, 'test', 40, 131, 'even deeper nesting comment', '2023-07-01 18:27:15');
 
 -- --------------------------------------------------------
 
@@ -78,20 +57,11 @@ INSERT INTO `comment` (`id`, `author`, `type`, `reply_to`, `content`, `date_crea
 
 CREATE TABLE `deleted` (
   `id` int NOT NULL,
-  `type` int NOT NULL COMMENT '0: post | 1: comment',
-  `target_id` int NOT NULL,
+  `post_id` int DEFAULT NULL,
+  `comment_id` int DEFAULT NULL,
   `deleted_by` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `deleted`
---
-
-INSERT INTO `deleted` (`id`, `type`, `target_id`, `deleted_by`, `date_created`) VALUES
-(2, 1, 55, 'admin', '2023-06-24 08:52:46'),
-(12, 1, 58, 'test', '2023-06-27 13:39:27'),
-(13, 1, 60, 'test', '2023-06-27 13:43:44');
 
 -- --------------------------------------------------------
 
@@ -112,7 +82,8 @@ CREATE TABLE `media` (
 INSERT INTO `media` (`id`, `path`, `uploader`) VALUES
 (1, 'default_avatar.png', 'admin'),
 (7, '64998c35dd7344.74870275.png', 'admin'),
-(12, '649a9299a32698.73479700.png', 'test');
+(12, '649a9299a32698.73479700.png', 'test'),
+(18, '649e8f7d99bdc3.65469515.jpg', 'test');
 
 -- --------------------------------------------------------
 
@@ -156,7 +127,7 @@ INSERT INTO `post` (`id`, `author`, `title`, `content`, `media_id`, `tags`, `dat
 (38, 'admin', 'The Latest Technology Innovations', 'Technology is constantly innovating and creating new solutions to old problems. In this post, we discuss some of the latest technology innovations and their potential impact on our lives.', NULL, 'technology, future', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (39, 'Luke', 'The Science of Aging', 'Aging is a natural process that affects us all. In this post, we explore the science behind aging and how to age gracefully.', NULL, 'science, health', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (40, 'Sophie', 'The Art of Dance', 'Dance is a beautiful art form that allows us to express ourselves and connect with others. In this post, we explore the art of dance and share some tips for improving your dancing skills.', NULL, 'art, dance', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
-(43, 'test', 'This is a test post', 'Written as user named \"test\". Testing `date_modified` field.', NULL, 'science', '2023-06-20 14:03:08', '2023-06-24 09:18:22');
+(43, 'test', 'This is a test post', 'Written as user named \"test\". Testing `date_modified` field. Presenting editing post.', 18, 'science, health', '2023-06-20 14:03:08', '2023-06-30 15:17:01');
 
 -- --------------------------------------------------------
 
@@ -166,8 +137,8 @@ INSERT INTO `post` (`id`, `author`, `title`, `content`, `media_id`, `tags`, `dat
 
 CREATE TABLE `report` (
   `id` int NOT NULL,
-  `target_type` int NOT NULL COMMENT '0: post | 1: comment | 2: user',
-  `target_id` int NOT NULL,
+  `post_id` int DEFAULT NULL,
+  `comment_id` int DEFAULT NULL,
   `reporter` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `reason` text COLLATE utf8mb4_unicode_ci,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -177,42 +148,9 @@ CREATE TABLE `report` (
 -- Dumping data for table `report`
 --
 
-INSERT INTO `report` (`id`, `target_type`, `target_id`, `reporter`, `reason`, `date_created`) VALUES
-(22, 1, 10, 'test', 'It\'s spam', '2023-06-27 20:17:44'),
-(23, 0, 27, 'test', 'It\'s offensive', '2023-06-27 20:18:54');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tag`
---
-
-CREATE TABLE `tag` (
-  `id` int NOT NULL,
-  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` text COLLATE utf8mb4_unicode_ci
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `tag`
---
-
-INSERT INTO `tag` (`id`, `name`, `description`) VALUES
-(1, 'science', 'The study of the natural world, including living and nonliving things, and the processes that govern them. Science encompasses many fields, such as biology, chemistry, physics, and earth science.'),
-(2, 'food', 'Any substance that is consumed to provide nutritional support for the body. Food can be derived from plants or animals and can be prepared in many ways.'),
-(3, 'sport', 'Physical activities that are competitive or recreational in nature and require skill, strength, and endurance. Sports can be individual or team-based and can include activities such as running, swimming, basketball, and soccer.'),
-(4, 'health', 'The state of being free from illness or injury and having a sound mind and body. Health can be influenced by many factors, such as genetics, lifestyle, environment, and access to healthcare.'),
-(5, 'art', 'Creative works that are produced by humans and are intended to be appreciated for their beauty, emotional power, or intellectual content. Art can take many forms, such as painting, sculpture, music, literature, and film.'),
-(6, 'photography', 'The art and practice of capturing images using a camera or other photographic equipment. Photography can be used for many purposes, such as artistic expression, journalism, scientific research, and commercial advertising.'),
-(7, 'technology', 'The application of scientific knowledge for practical purposes, especially in industry and commerce. Technology can include many fields, such as information technology, biotechnology, nanotechnology, and robotics.'),
-(8, 'future', 'The time period that is yet to come and the events that will occur during that time. The future is often uncertain and can be influenced by many factors, such as technology, politics, economics, and social trends.'),
-(9, 'writing', 'The act of creating written works, such as books, articles, essays, and poems. Writing can be used for many purposes, such as storytelling, education, persuasion, and entertainment.'),
-(10, 'music', 'The art and practice of creating and performing sounds that are organized in time and have melody, harmony, rhythm, and timbre. Music can take many forms, such as classical, jazz, rock, pop, and folk.'),
-(11, 'news', 'Information about current events that is reported by journalists and media outlets. News can cover many topics, such as politics, business, sports, entertainment, and science.'),
-(12, 'film', 'A form of visual art that uses moving images to tell stories or convey ideas. Film can be used for many purposes, such as entertainment, education, propaganda, and artistic expression.'),
-(13, 'gadgets', 'Small electronic devices that are designed for a specific purpose and are often portable or wearable. Gadgets can include many types of devices, such as smartphones, tablets, fitness trackers, and smartwatches.'),
-(14, 'education', 'The process of acquiring knowledge, skills, values, and attitudes through various forms of learning, such as schooling, training, and self-study. Education can take many forms, such as formal education, informal education, and lifelong learning.'),
-(15, 'dance', 'A form of artistic expression that involves rhythmic movement of the body in response to music or other stimuli. Dance can take many forms, such as ballet, hip-hop, salsa, and ballroom.');
+INSERT INTO `report` (`id`, `post_id`, `comment_id`, `reporter`, `reason`, `date_created`) VALUES
+(25, 27, NULL, 'test', 'It\'s misleading', '2023-06-29 20:45:13'),
+(29, NULL, 129, 'test', 'It\'s inappropriate', '2023-07-01 18:26:35');
 
 -- --------------------------------------------------------
 
@@ -244,8 +182,8 @@ INSERT INTO `user` (`username`, `password`, `role`, `avatar_id`, `date_created`)
 
 CREATE TABLE `voting` (
   `id` int NOT NULL,
-  `target_type` int NOT NULL,
-  `target_id` int NOT NULL,
+  `post_id` int DEFAULT NULL,
+  `comment_id` int DEFAULT NULL,
   `voter` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_upvote` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -254,12 +192,12 @@ CREATE TABLE `voting` (
 -- Dumping data for table `voting`
 --
 
-INSERT INTO `voting` (`id`, `target_type`, `target_id`, `voter`, `is_upvote`) VALUES
-(47, 1, 52, 'admin', 1),
-(69, 1, 4, 'test', 1),
-(70, 0, 27, 'test', 1),
-(71, 0, 27, 'admin', 1),
-(72, 1, 8, 'test', 0);
+INSERT INTO `voting` (`id`, `post_id`, `comment_id`, `voter`, `is_upvote`) VALUES
+(71, 27, NULL, 'admin', 1),
+(74, 27, NULL, 'test', 1),
+(80, 40, NULL, 'test', 1),
+(81, NULL, 128, 'test', 0),
+(82, NULL, 130, 'test', 1);
 
 --
 -- Indexes for dumped tables
@@ -271,8 +209,10 @@ INSERT INTO `voting` (`id`, `target_type`, `target_id`, `voter`, `is_upvote`) VA
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`),
-  ADD KEY `author` (`author`,`reply_to`),
-  ADD KEY `id_2` (`id`,`author`,`reply_to`);
+  ADD KEY `author` (`author`,`replied_to`),
+  ADD KEY `id_2` (`id`,`author`,`replied_to`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `replied_to` (`replied_to`);
 
 --
 -- Indexes for table `deleted`
@@ -280,7 +220,8 @@ ALTER TABLE `comment`
 ALTER TABLE `deleted`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`),
-  ADD KEY `target_id` (`target_id`,`deleted_by`),
+  ADD KEY `target_id` (`post_id`,`deleted_by`),
+  ADD KEY `comment_id` (`comment_id`),
   ADD KEY `deleted_by` (`deleted_by`);
 
 --
@@ -288,7 +229,8 @@ ALTER TABLE `deleted`
 --
 ALTER TABLE `media`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`);
+  ADD KEY `id` (`id`),
+  ADD KEY `uploader` (`uploader`);
 
 --
 -- Indexes for table `post`
@@ -305,15 +247,10 @@ ALTER TABLE `post`
 ALTER TABLE `report`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`),
-  ADD KEY `target_id` (`target_id`,`reporter`),
+  ADD KEY `target_id` (`comment_id`,`reporter`),
+  ADD KEY `post_id` (`post_id`),
+  ADD KEY `comment_id` (`comment_id`),
   ADD KEY `reporter` (`reporter`);
-
---
--- Indexes for table `tag`
---
-ALTER TABLE `tag`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`);
 
 --
 -- Indexes for table `user`
@@ -328,8 +265,9 @@ ALTER TABLE `user`
 ALTER TABLE `voting`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id` (`id`),
-  ADD KEY `target_id` (`target_id`,`voter`),
-  ADD KEY `voter` (`voter`);
+  ADD KEY `target_id` (`comment_id`,`voter`),
+  ADD KEY `voter` (`voter`),
+  ADD KEY `post_id` (`post_id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -339,43 +277,85 @@ ALTER TABLE `voting`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `deleted`
 --
 ALTER TABLE `deleted`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
-
---
--- AUTO_INCREMENT for table `tag`
---
-ALTER TABLE `tag`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `voting`
 --
 ALTER TABLE `voting`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `comment`
+--
+ALTER TABLE `comment`
+  ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`author`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `comment_ibfk_3` FOREIGN KEY (`replied_to`) REFERENCES `comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `deleted`
+--
+ALTER TABLE `deleted`
+  ADD CONSTRAINT `deleted_ibfk_1` FOREIGN KEY (`deleted_by`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `deleted_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `deleted_ibfk_3` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `media`
+--
+ALTER TABLE `media`
+  ADD CONSTRAINT `media_ibfk_1` FOREIGN KEY (`uploader`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `post`
+--
+ALTER TABLE `post`
+  ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `report`
+--
+ALTER TABLE `report`
+  ADD CONSTRAINT `report_ibfk_1` FOREIGN KEY (`reporter`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `report_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `report_ibfk_3` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `voting`
+--
+ALTER TABLE `voting`
+  ADD CONSTRAINT `voting_ibfk_1` FOREIGN KEY (`voter`) REFERENCES `user` (`username`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `voting_ibfk_2` FOREIGN KEY (`post_id`) REFERENCES `post` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `voting_ibfk_3` FOREIGN KEY (`comment_id`) REFERENCES `comment` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -8,11 +8,13 @@ class DeletedCtrl extends Controller {
     public function deletePost($post_id, $deleter) {
         $postmdl = new Deleted($this->conn);
         $postmdl->hideItem(0, $post_id, $deleter);
+        // $postmdl->deleteItem("post", $post_id);
     }
 
     public function deleteComment($comment_id, $deleter) {
         $cmtmdl = new Deleted($this->conn);
-        $cmtmdl->deleteItem(1, $comment_id);
+        $cmtmdl->hideItem(1, $comment_id, $deleter);
+        // $cmtmdl->deleteItem("comment", $comment_id);
     }
 
     public function itemIsHidden($type, $id) {

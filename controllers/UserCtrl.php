@@ -7,6 +7,7 @@ class UserCtrl extends Controller {
     // -12: username invalid
     // -20: incorrect password
     // -21: password not matched
+    // -22: password invalid
 
     public function __construct() {
         parent::__construct();
@@ -58,6 +59,9 @@ class UserCtrl extends Controller {
         } else if ($this->req["reg-pwd"] !== $this->req["reg-pwd-confirm"]) {
             // password does not match
             return "-21";
+        } else if (strlen($this->req["reg-pwd"]) < 3) {
+            // password invalid
+            return "-22";
         } else {
             $user->username = $this->req["reg-username"];
             $user->password = password_hash($this->req["reg-pwd"], PASSWORD_DEFAULT);

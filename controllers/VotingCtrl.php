@@ -5,18 +5,18 @@ class VotingCtrl extends Controller {
         parent::__construct();
     }
 
-    public function addVote($target_type, $target_id, $voter, $is_upvote) {
+    public function addVote($post_id, $comment_id, $voter, $is_upvote) {
         $voting = new Voting($this->conn);
-        return $voting->addVote($target_type, $target_id, $voter, $is_upvote);
+        return $voting->addVote($post_id, $comment_id, $voter, $is_upvote);
     }
 
-    public function voteExisted($target_type, $target_id, $voter, $is_upvote) {
+    public function voteExisted($post_id, $comment_id, $voter, $is_upvote) {
         $voting = new Voting($this->conn);
-        return $voting->voteExisted($target_type, $target_id, $voter, $is_upvote);
+        return $voting->voteExisted($post_id, $comment_id, $voter, $is_upvote);
     }
 
-    public function votingScore($target_type, $target_id) {
+    public function votingScore($post_id, $comment_id) {
         $voting = new Voting($this->conn);
-        return $voting->votingScore($target_type, $target_id);
+        return $voting->votingScore($post_id, $comment_id);
     }
 }

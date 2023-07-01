@@ -71,7 +71,18 @@ Router::get("posts/create", function () {
 
 Router::post("posts/create", function () {
     $post = new PostCtrl();
-    $post->createPost();
+    $postId = $post->createPost();
+
+    if (isset($_FILES["file"])) {
+        $mediaCtrl = new MediaCtrl();
+        $filePath = $mediaCtrl->uploadMedia();
+        $fileId = $mediaCtrl->getFileIdByPath($filePath);
+
+        $post->setPostMedia($postId, $fileId);
+    }
+
+    echo $postId;
+
     header("Location: " . ROOT . "profile");
 });
 
@@ -113,17 +124,23 @@ Router::post("posts/delete", function () {
 
 Router::post("posts/report", function () {
     $reportCtrl = new ReportCtrl();
-    if ($reportCtrl->reportExisted(0, $_POST["post-id"], $_SESSION["username"])) {
-        $reportCtrl->deleteReport(0, $_POST["post-id"], $_SESSION["username"]);
+    if ($reportCtrl->reportExisted($_POST["post-id"], NULL, $_SESSION["username"])) {
+        $reportCtrl->deleteReport($_POST["post-id"], NULL, $_SESSION["username"]);
     } else {
-        $reportCtrl->addReport(0, $_POST["post-id"], $_SESSION["username"], $_POST["reason"]);
+        $reportCtrl->addReport($_POST["post-id"], NULL, $_SESSION["username"], $_POST["reason"]);
     }
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 
 Router::post("posts/voting", function () {
     $post = new VotingCtrl();
-    $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+
+    if ($_POST["target-type"] == 0) {
+        $post->addVote($_POST["target-id"], NULL, $_POST["voter"], $_POST["is-upvote"]);
+    } else {
+        $post->addVote(NULL, $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+    }
+
     header("Location: " . ROOT . "posts/view/" . $_POST["target-id"]);
 });
 
@@ -150,7 +167,7 @@ Router::get("posts/search", function () {
 
 Router::post("comments/add", function () {
     $comment = new CommentCtrl();
-    $comment->addComment($_POST["author"], $_POST["type"], $_POST["reply_to"], $_POST["content"]);
+    $comment->addComment($_POST["author"], $_POST["post-id"], $_POST["replied_to"], $_POST["content"]);
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
@@ -164,10 +181,10 @@ Router::post("comments/delete", function () {
 
 Router::post("comments/report", function () {
     $reportCtrl = new ReportCtrl();
-    if ($reportCtrl->reportExisted(1, $_POST["comment-id"], $_SESSION["username"])) {
-        $reportCtrl->deleteReport(1, $_POST["comment-id"], $_SESSION["username"]);
+    if ($reportCtrl->reportExisted(NULL, $_POST["comment-id"], $_SESSION["username"])) {
+        $reportCtrl->deleteReport(NULL, $_POST["comment-id"], $_SESSION["username"]);
     } else {
-        $reportCtrl->addReport(1, $_POST["comment-id"], $_SESSION["username"], $_POST["reason"]);
+        $reportCtrl->addReport(NULL, $_POST["comment-id"], $_SESSION["username"], $_POST["reason"]);
     }
 
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
@@ -175,7 +192,11 @@ Router::post("comments/report", function () {
 
 Router::post("comments/voting", function () {
     $post = new VotingCtrl();
-    $post->addVote($_POST["target-type"], $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+    if ($_POST["target-type"] == 0) {
+        $post->addVote($_POST["target-id"], NULL, $_POST["voter"], $_POST["is-upvote"]);
+    } else if ($_POST["target-type"] == 1) {
+        $post->addVote(NULL, $_POST["target-id"], $_POST["voter"], $_POST["is-upvote"]);
+    }
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });
 

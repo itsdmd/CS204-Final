@@ -14,17 +14,22 @@ class Deleted {
         $stmt->execute();
     }
 
-    public function deleteItem($type, $id) {
-        $sql = "DELETE FROM deleted WHERE type = ? AND target_id = ?";
+    public function deleteItem($table, $id) {
+        $sql = "DELETE FROM " . $table . " WHERE id = ?";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $type, $id);
+        $stmt->bind_param("si", $table, $id);
         $stmt->execute();
     }
 
     public function itemIsHidden($type, $id) {
-        $sql = "SELECT * FROM deleted WHERE type = ? AND target_id = ?";
+        if ($type == 0) {
+            $sql = "SELECT * FROM deleted WHERE post_id = ?";
+        } else {
+            $sql = "SELECT * FROM deleted WHERE comment_id = ?";
+        }
+
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ss", $type, $id);
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
 

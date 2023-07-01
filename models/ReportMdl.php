@@ -7,30 +7,63 @@ class Report {
         $this->conn = $conn;
     }
 
-    public function addReport($target_type, $target_id, $reporter, $reason) {
-        if ($this->reportExisted($target_type, $target_id, $reporter)) {
+    public function addReport($post_id, $comment_id, $reporter, $reason) {
+        if ($this->reportExisted($post_id, $comment_id, $reporter)) {
             return;
         }
 
-        $sql = "INSERT INTO report (target_type, target_id, reporter, reason) VALUES (?, ?, ?, ?)";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iiss", $target_type, $target_id, $reporter, $reason);
+        if ($post_id == NULL) {
+            $sql = "INSERT INTO report (comment_id, reporter, reason) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iss", $comment_id, $reporter, $reason);
+        } else if ($comment_id == NULL) {
+            $sql = "INSERT INTO report (post_id, reporter, reason) VALUES (?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iss", $post_id, $reporter, $reason);
+        } else {
+            $sql = "INSERT INTO report (post_id, comment_id, reporter, reason) VALUES (?, ?, ?, ?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iiss", $post_id, $comment_id, $reporter, $reason);
+        }
+
         $stmt->execute();
         $stmt->close();
     }
 
-    public function deleteReport($target_type, $target_id, $reporter) {
-        $sql = "DELETE FROM report WHERE target_type = ? AND target_id = ? AND reporter = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iis", $target_type, $target_id, $reporter);
+    public function deleteReport($post_id, $comment_id, $reporter) {
+        if ($post_id == NULL) {
+            $sql = "DELETE FROM report WHERE comment_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $comment_id, $reporter);
+        } else if ($comment_id == NULL) {
+            $sql = "DELETE FROM report WHERE post_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $post_id, $reporter);
+        } else {
+            $sql = "DELETE FROM report WHERE post_id = ? AND comment_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iis", $post_id, $comment_id, $reporter);
+        }
+
         $stmt->execute();
         $stmt->close();
     }
 
-    public function reportExisted($target_type, $target_id, $reporter) {
-        $sql = "SELECT * FROM report WHERE target_type = ? AND target_id = ? AND reporter = ?";
-        $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iis", $target_type, $target_id, $reporter);
+    public function reportExisted($post_id, $comment_id, $reporter) {
+        if ($post_id == NULL) {
+            $sql = "SELECT * FROM report WHERE comment_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $comment_id, $reporter);
+        } else if ($comment_id == NULL) {
+            $sql = "SELECT * FROM report WHERE post_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("is", $post_id, $reporter);
+        } else {
+            $sql = "SELECT * FROM report WHERE post_id = ? AND comment_id = ? AND reporter = ?";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("iis", $post_id, $comment_id, $reporter);
+        }
+
         $stmt->execute();
         $result = $stmt->get_result();
         $stmt->close();
@@ -38,8 +71,13 @@ class Report {
         return $result->num_rows > 0;
     }
 
-    public function countReportsByTargetId($target_id) {
-        $sql = "SELECT * FROM report WHERE target_id = ?";
+    public function countReportsByTargetId($type, $target_id) {
+        if ($type == 0) {
+            $sql = "SELECT * FROM report WHERE post_id = ?";
+        } else {
+            $sql = "SELECT * FROM report WHERE comment_id = ?";
+        }
+
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $target_id);
         $stmt->execute();

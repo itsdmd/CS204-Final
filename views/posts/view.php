@@ -9,12 +9,12 @@ $mediaCtrl = new MediaCtrl();
 $mediaPath = $mediaCtrl->getFilePathById($postCtrl->getPostMediaId($post["id"]));
 
 $votingCtrl = new VotingCtrl();
-$vote_count = $votingCtrl->votingScore(0, $post["id"]);
-$upvote_existed = $votingCtrl->voteExisted(0, $post["id"], $_SESSION["username"], 1);
-$downvote_existed = $votingCtrl->voteExisted(0, $post["id"], $_SESSION["username"], 0);
+$vote_count = $votingCtrl->votingScore($post["id"], NULL);
+$upvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["username"], 1);
+$downvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["username"], 0);
 
 $reportCtrl = new ReportCtrl();
-$report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username"]);
+$report_existed = $reportCtrl->reportExisted($post["id"], NULL, $_SESSION["username"]);
 ?>
 
 <!-- jumbotron -->
@@ -186,7 +186,7 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
                 <!-- delete button if current user has role=0 or is the author -->
                 <?php if (($_SESSION['role'] == 0) || ($_SESSION['username'] == $post['author'])) : ?>
                     <form action="<?= ROOT; ?>posts/delete" method="post">
-                        <input type="hidden" name="id" value="<?= $post['id']; ?>">
+                        <input type="hidden" name="post-id" value="<?= $post['id']; ?>">
                         <button class="btn btn-outline-danger" type="submit">
                             <i class="fa-solid fa-trash"></i>
                             <b>Delete</b>
@@ -211,7 +211,7 @@ $report_existed = $reportCtrl->reportExisted(0, $post["id"], $_SESSION["username
                         <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
                         <input type="hidden" name="author" value="<?= $_SESSION["username"] ?>">
                         <input type="hidden" name="type" value="0">
-                        <input type="hidden" name="reply_to" value="<?= $post["id"] ?>">
+                        <input type="hidden" name="replied-to" value="<?= $post["id"] ?>">
                         <input name="content" class="form-control mb-3" placeholder="Write a comment...">
 
                         <div class="col-12 d-flex justify-content-end">

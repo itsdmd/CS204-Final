@@ -64,7 +64,7 @@ class PostCtrl extends Controller {
         $author = $_SESSION["username"];
         $tags = $_POST["post-tags"];
 
-        $post->createPost($title, $content, $author, $tags);
+        return $post->createPost($title, $content, $author, $tags);
     }
 
     public function editPost($id) {

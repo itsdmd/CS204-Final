@@ -51,7 +51,10 @@ if (isset($_SESSION["status"])) {
                                 not matched.</small>
                         <?php
                             $_SESSION = array();
-                        } ?>
+                        } else if ($status === "-22") { ?>
+                            <small class="form-text text-danger">Password
+                                invalid.</small>
+                        <?php } ?>
                     </div>
                     <button type="submit" class="btn btn-warning btn-block btn-lg" name="register"><i class="fa fa-user-plus" aria-hidden="true"></i> Register</button>
                     <?php if ($status === "1") { ?>

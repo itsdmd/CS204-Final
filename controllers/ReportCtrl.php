@@ -5,23 +5,23 @@ class ReportCtrl extends Controller {
         parent::__construct();
     }
 
-    public function addReport($target_type, $target_id, $reporter, $reason) {
+    public function addReport($post_id, $comment_id, $reporter, $reason) {
         $rptmdl = new Report($this->conn);
-        $rptmdl->addReport($target_type, $target_id, $reporter, $reason);
+        $rptmdl->addReport($post_id, $comment_id, $reporter, $reason);
     }
 
-    public function deleteReport($target_type, $target_id, $reporter) {
+    public function deleteReport($post_id, $comment_id, $reporter) {
         $rptmdl = new Report($this->conn);
-        $rptmdl->deleteReport($target_type, $target_id, $reporter);
+        $rptmdl->deleteReport($post_id, $comment_id, $reporter);
     }
 
-    public function reportExisted($target_type, $target_id, $reporter) {
+    public function reportExisted($post_id, $comment_id, $reporter) {
         $rptmdl = new Report($this->conn);
-        return $rptmdl->reportExisted($target_type, $target_id, $reporter);
+        return $rptmdl->reportExisted($post_id, $comment_id, $reporter);
     }
 
-    public function countReportsByTargetId($target_id) {
+    public function countReportsByTargetId($type, $target_id) {
         $rptmdl = new Report($this->conn);
-        return $rptmdl->countReportsByTargetId($target_id);
+        return $rptmdl->countReportsByTargetId($type, $target_id);
     }
 }

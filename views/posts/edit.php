@@ -19,24 +19,33 @@ $post = $postCtrl->fetchPostById(end($url_exploded));
     </div>
     <div class="row">
         <div class="col-12">
-            <form action="<?= ROOT; ?>posts/edit" method="post" enctype="multipart/form-data">
+            <form action="<?= ROOT; ?>posts/edit" method="post"
+                enctype="multipart/form-data">
                 <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
                 <div class="form-group">
                     <label for="file" class="form-label">
                         <i class="fas fa-image"></i> Upload</label>
-                    <input class="form-control" type="file" id="file" name="file">
+                    <input class="form-control" type="file" id="file"
+                        name="file">
                 </div>
                 <div class="form-group">
                     <label for="post-title">Title</label>
-                    <input type="text" class="form-control" id="post-title" name="post-title" placeholder="Enter post title" value="<?= $post["title"] ?>">
+                    <input type="text" class="form-control" id="post-title"
+                        name="post-title" placeholder="Enter post title"
+                        value="<?= $post["title"] ?>">
                 </div>
                 <div class="form-group">
                     <label for="post-content">content</label>
-                    <textarea class="form-control" id="post-content" name="post-content" rows="5" placeholder="Enter post content"><?= $post["content"] ?></textarea>
+                    <textarea class="form-control" id="post-content"
+                        name="post-content" rows="5"
+                        placeholder="Enter post content"><?= $post["content"] ?></textarea>
                 </div>
                 <div class="form-group">
                     <label for="post-tags">Tags</label>
-                    <input type="text" class="form-control" id="post-tags" name="post-tags" placeholder="Enter post tags (eg. 'science,math,physics')" value="<?= $post["tags"] ?>">
+                    <input type="text" class="form-control" id="post-tags"
+                        name="post-tags"
+                        placeholder="Enter post tags (eg. 'science,math,physics')"
+                        value="<?= $post["tags"] ?>">
                 </div>
                 <button type="submit" class="btn btn-info">Update</button>
             </form>
