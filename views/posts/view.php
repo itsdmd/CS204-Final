@@ -14,6 +14,7 @@ $upvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["usernam
 $downvote_existed = $votingCtrl->voteExisted($post["id"], NULL, $_SESSION["username"], 0);
 
 $reportCtrl = new ReportCtrl();
+$reports = $reportCtrl->getReportsByTargetId(0, $post["id"]);
 $report_existed = $reportCtrl->reportExisted($post["id"], NULL, $_SESSION["username"]);
 ?>
 
@@ -121,6 +122,72 @@ $report_existed = $reportCtrl->reportExisted($post["id"], NULL, $_SESSION["usern
                                                                 } ?> mr-1"><i class="fa-solid fa-arrow-down"></i></button>
                     </form>
                 <?php endif; ?>
+
+                <!-- Number of report -->
+                &nbsp;&nbsp;
+                |
+                &nbsp;&nbsp;
+                <button class="btn btn-outline-dark" data-toggle="modal" data-target="#reportsModal">
+                    <p class="mb-0">
+                        <i class="fa-solid fa-flag"></i>
+                        &nbsp;&nbsp;
+                        <?= $reportCtrl->countReportsByTargetId(0, $post["id"]) ?>
+                        reports
+                    </p>
+                </button>
+
+                <!-- reports modal -->
+                <div class="modal fade" id="reportsModal" tabindex="-1" role="dialog" aria-labelledby="reportsModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="reportsModalLabel">Reports</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped mt-3">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Reporter</th>
+                                            <th>Reason</th>
+                                            <th>Date created</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($reports as $report) : ?>
+                                            <tr>
+                                                <td><?= $report["id"] ?></td>
+                                                <td><?= $report["reporter"] ?></td>
+                                                <td><?= $report["reason"] ?></td>
+                                                <td><?= $report["date_created"] ?></td>
+                                                <td>
+                                                    <?php if ($_SESSION["role"] == 0 || $_SESSION["username"] == $report["reporter"]) : ?>
+                                                        <div class="d-flex">
+                                                            <form action="<?= ROOT . "posts/report" ?>" method="post">
+                                                                <input type="hidden" name="post-id" value="<?= $post["id"] ?>">
+                                                                <button type="submit" name="username" value="<?= $user["username"] ?>" class="btn btn-outline-danger ml-1"><i class="fa-solid fa-trash"></i>
+                                                                    <!-- <b>Delete</b> -->
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach; ?>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- Actions -->

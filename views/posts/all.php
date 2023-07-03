@@ -54,8 +54,13 @@
     if ($posts == NULL) {
         echo "<h3 class='mt-5'>No posts found</h3>";
     } else {
+        $votingCtrl = new VotingCtrl();
+        $reportCtrl = new ReportCtrl();
 
-        foreach ($posts as $post) : ?>
+        foreach ($posts as $post) :
+            $voting_score = $votingCtrl->votingScore($post["id"], NULL);
+            $report_count = $reportCtrl->countReportsByTargetId(0, $post["id"]);
+    ?>
             <div class="d-flex align-items-center justify-content-around">
                 <div class="card mt-4 mb-4 ml-1 flex-grow-1">
                     <div class="card-body">
@@ -86,21 +91,58 @@
                                                 }
                                                 echo $content;
                                                 ?></p>
-                        <div class="d-flex">
-                            <button class="btn btn-info mr-2" type="button" onclick="location.href='<?= ROOT; ?>posts/view/<?= $post['id']; ?>'">
-                                <i class="fa-solid fa-eye"></i>
-                                <b>Read</b>
-                            </button>
-                            <!-- delete button if current user has role=0 -->
-                            <?php if ($_SESSION['role'] == 0) : ?>
-                                <form action="<?= ROOT; ?>posts/delete" method="post">
-                                    <input type="hidden" name="post-id" value="<?= $post['id']; ?>">
-                                    <button class="btn btn-outline-danger" type="submit">
-                                        <i class="fa-solid fa-trash"></i>
-                                        <b>Delete</b>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <b class="d-flex">
+                                    <?php if ($voting_score > 0) : ?>
+                                        <i class="fa-solid fa-thumbs-up text-success"></i>
+                                        &nbsp;&nbsp;
+                                        <p class="text-success mr-4">
+                                            <?= $voting_score ?> points
+                                        </p>
+                                    <?php elseif ($voting_score < 0) : ?>
+                                        <i class="fa-solid fa-thumbs-down text-danger"></i>
+                                        &nbsp;&nbsp;
+                                        <p class="text-danger mr-4">
+                                            <?= $voting_score ?> points
+                                        </p>
+                                    <?php else : ?>
+                                        <i class="fa-solid fa-thumbs-up text-secondary"></i>
+                                        &nbsp;&nbsp;
+                                        <p class="text-secondary mr-4">
+                                            <?= $voting_score ?> points
+                                        </p>
+                                    <?php endif; ?>
+                                </b>
+
+                                <?php if ($_SESSION["role"] == "0") : ?>
+                                    <b class="d-flex">
+                                        <i class="fa-solid fa-flag"></i>
+                                        &nbsp;&nbsp;
+                                        <p>
+                                            <?= $report_count ?> reports
+                                        </p>
+                                    </b>
+                                <?php endif; ?>
+                            </div>
+                            <div class="d-flex">
+                                <form action="<?= ROOT; ?>posts/view/<?= $post['id']; ?>" method="get">
+                                    <button class="btn btn-info mr-2" type="submit">
+                                        <i class="fa-solid fa-eye"></i>
+                                        <b>Read</b>
                                     </button>
                                 </form>
-                            <?php endif; ?>
+                                <!-- delete button if current user has role=0 -->
+                                <?php if ($_SESSION['role'] == 0) : ?>
+                                    <form action="<?= ROOT; ?>posts/delete" method="post">
+                                        <input type="hidden" name="post-id" value="<?= $post['id']; ?>">
+                                        <button class="btn btn-outline-danger" type="submit">
+                                            <i class="fa-solid fa-trash"></i>
+                                            <b>Delete</b>
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
