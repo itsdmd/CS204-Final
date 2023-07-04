@@ -69,7 +69,7 @@ include "views/includes/header.php";
     </div>
     <div class="row">
         <div class="col-12">
-            <table class="table table-bordered table-striped mt-3">
+            <table class="table table-bordered table-striped table-hover mt-3">
                 <thead class="thead-dark">
                     <tr>
                         <th>ID</th>
@@ -134,7 +134,7 @@ include "views/includes/header.php";
         </div>
         <div class="row">
             <div class="col-12">
-                <table class="table table-bordered table-striped mt-3">
+                <table class="table table-bordered table-striped table-hover mt-3">
                     <thead class="thead-dark">
                         <tr>
                             <th>Username</th>

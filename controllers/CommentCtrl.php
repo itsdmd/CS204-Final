@@ -116,49 +116,56 @@ class CommentCtrl extends Controller {
             $html .= "  </div>";
 
             // report button
-            if ($_SESSION["role"] != "0") {
-                if ($report_existed) {
-                    $html .= "  <form action='" . ROOT . "comments/report' method='POST' class='mr-1'>";
-                    $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-                    $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
-                    $html .= "  <button class='btn btn-dark' type='submit'>";
-                } else {
-                    $html .= "  <button class='btn btn-outline-dark' data-toggle='modal' data-target='#reportCommentModal" . $comment["id"] . "' type='button'>";
-                }
-                $html .= "<i class='fa-solid fa-flag'></i></button>";
+            $html .= "  <form action='" . ROOT . "comments/report' method='POST' class='mr-1'>";
+            $html .= "      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
 
-                $html .= "  <div class='modal fade' id='reportCommentModal" . $comment["id"] . "' tabindex='-1' role='dialog'>";
-                $html .= "      <div class='modal-dialog' role='document'>";
-                $html .= "          <div class='modal-content'>";
-                $html .= "              <div class='modal-header'>";
-                $html .= "                  <h5 class='modal-title'>Report Comment</h5>";
-                $html .= "                  <button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
-                $html .= "                      <span aria-hidden='true'>&times;</span>";
-                $html .= "                  </button>";
-                $html .= "              </div>";
-                $html .= "              <div class='modal-body'>";
-                $html .= "                  <form action='" . ROOT . "comments/report' method='POST'>";
-                $html .= "                      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
-                $html .= "                      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
-                $html .= "                      <div class='mb-3'>";
-                $html .= "                          <label for='reason' class='form-label'>I want to report this comment because</label>";
-                $html .= "                          <select class='form-select' name='reason'>";
-                $html .= "                              <option value=\"It's spam\">It's spam</option>";
-                $html .= "                              <option value=\"It's inappropriate\">It's inappropriate</option>";
-                $html .= "                              <option value=\"It's offensive\">It's offensive</option>";
-                $html .= "                              <option value=\"It's misleading\">It's misleading</option>";
-                $html .= "                          </select>";
-                $html .= "                      </div>";
-                $html .= "                  <div class='modal-footer'>";
-                $html .= "                      <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
-                $html .= "                      <button type='submit' class='btn btn-info'>Submit</button>";
-                $html .= "                  </div>";
-                $html .= "              </form>";
-                $html .= "          </div>";
-                $html .= "      </div>";
-                $html .= "  </div>";
-                $html .= "</div>";
+            if ($report_existed) {
+                $html .= "  <button class='btn btn-dark' type='submit'>";
+            } else {
+                $html .= "  <button class='btn btn-outline-dark' data-toggle='modal' data-target='#reportCommentModal" . $comment["id"] . "' type='button'>";
             }
+
+            $html .= "<i class='fa-solid fa-flag'></i>";
+            $html .= "&nbsp;&nbsp;";
+            $report_count = $reportCtrl->countReportsByTargetId(1, $comment["id"]);
+            $html .= "<span>" . $report_count . "</span>";
+            $html .= "  </button>";
+
+            $html .= "  <div class='modal fade' id='reportCommentModal" . $comment["id"] . "' tabindex='-1' role='dialog'>";
+            $html .= "      <div class='modal-dialog' role='document'>";
+            $html .= "          <div class='modal-content'>";
+
+            $html .= "              <div class='modal-header'>";
+            $html .= "                  <h5 class='modal-title'>Report Comment</h5>";
+            $html .= "                  <button type='button' class='close' data-dismiss='modal' aria-label='Close'>";
+            $html .= "                      <span aria-hidden='true'>&times;</span>";
+            $html .= "                  </button>";
+            $html .= "              </div>";
+
+            $html .= "              <div class='modal-body'>";
+            $html .= "                  <form action='" . ROOT . "comments/report' method='POST'>";
+            $html .= "                      <input type='hidden' name='post-id' value='" . $current_post_id . "'>";
+            $html .= "                      <input type='hidden' name='comment-id' value='" . $comment["id"] . "'>";
+            $html .= "                      <div class='mb-3'>";
+            $html .= "                          <label for='reason' class='form-label'>I want to report this comment because</label>";
+            $html .= "                          <select class='form-select' name='reason'>";
+            $html .= "                              <option value=\"It's spam\">It's spam</option>";
+            $html .= "                              <option value=\"It's inappropriate\">It's inappropriate</option>";
+            $html .= "                              <option value=\"It's offensive\">It's offensive</option>";
+            $html .= "                              <option value=\"It's misleading\">It's misleading</option>";
+            $html .= "                          </select>";
+            $html .= "                       </div>";
+            $html .= "                       <div class='modal-footer'>";
+            $html .= "                           <button type='button' class='btn btn-secondary' data-dismiss='modal'>Close</button>";
+            $html .= "                           <button type='submit' class='btn btn-info'>Submit</button>";
+            $html .= "                       </div>";
+            $html .= "                  </form>";
+            $html .= "              </div>";
+
+            $html .= "          </div>";
+            $html .= "       </div>";
+            $html .= "   </div>";
         }
 
         // delete button for role=0 or created by current user

@@ -8,9 +8,13 @@ class Deleted {
     }
 
     public function hideItem($type, $id, $deleted_by) {
-        $sql = "INSERT INTO deleted (type, target_id, deleted_by) VALUES (?, ?, ?)";
+        if ($type == 0) {
+            $sql = "INSERT INTO deleted (post_id, deleted_by) VALUES (?, ?)";
+        } else {
+            $sql = "INSERT INTO deleted (comment_id, deleted_by) VALUES (?, ?)";
+        }
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sss", $type, $id, $deleted_by);
+        $stmt->bind_param("is", $id, $deleted_by);
         $stmt->execute();
     }
 

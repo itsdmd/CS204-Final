@@ -128,11 +128,17 @@ Router::post("posts/delete", function () {
 });
 
 Router::post("posts/report", function () {
-    $reportCtrl = new ReportCtrl();
-    if ($reportCtrl->reportExisted($_POST["post-id"], NULL, $_SESSION["username"])) {
-        $reportCtrl->deleteReport($_POST["post-id"], NULL, $_SESSION["username"]);
+    if (isset($_POST["username"])) {
+        $username = $_POST["username"];
     } else {
-        $reportCtrl->addReport($_POST["post-id"], NULL, $_SESSION["username"], $_POST["reason"]);
+        $username = $_SESSION["username"];
+    }
+
+    $reportCtrl = new ReportCtrl();
+    if ($reportCtrl->reportExisted($_POST["post-id"], NULL, $username)) {
+        $reportCtrl->deleteReport($_POST["post-id"], NULL, $username);
+    } else {
+        $reportCtrl->addReport($_POST["post-id"], NULL, $username, $_POST["reason"]);
     }
     header("Location: " . ROOT . "posts/view/" . $_POST["post-id"]);
 });

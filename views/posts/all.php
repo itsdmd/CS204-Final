@@ -64,7 +64,11 @@
             <div class="d-flex align-items-center justify-content-around">
                 <div class="card mt-4 mb-4 ml-1 flex-grow-1">
                     <div class="card-body">
-                        <h5 class="card-title"><?= $post['title']; ?></h5>
+                        <h5 class="card-title">
+                            <a href="<?= ROOT; ?>posts/view/<?= $post['id']; ?>" class="text-dark">
+                                <?= $post['title']; ?>
+                            </a>
+                        </h5>
                         <h6 class="card-subtitle mb-2 text-muted">
                             &nbsp;
                             <img src="<?php
@@ -115,15 +119,13 @@
                                     <?php endif; ?>
                                 </b>
 
-                                <?php if ($_SESSION["role"] == "0") : ?>
-                                    <b class="d-flex">
-                                        <i class="fa-solid fa-flag"></i>
-                                        &nbsp;&nbsp;
-                                        <p>
-                                            <?= $report_count ?> reports
-                                        </p>
-                                    </b>
-                                <?php endif; ?>
+                                <b class="d-flex">
+                                    <i class="fa-solid fa-flag"></i>
+                                    &nbsp;&nbsp;
+                                    <p>
+                                        <?= $report_count ?> reports
+                                    </p>
+                                </b>
                             </div>
                             <div class="d-flex">
                                 <form action="<?= ROOT; ?>posts/view/<?= $post['id']; ?>" method="get">
@@ -154,7 +156,7 @@
                     $mediaCtrl = new MediaCtrl();
                     $mediaPath = $mediaCtrl->getFilePathById($postCtrl->getPostMediaId($post["id"]));
                 ?>
-                    <img src="<?= ROOT ?>img/uploads/<?= $mediaPath ?>" style="width: 200px; height: 200px; overflow: hidden; object-fit: content;">
+                    <img src="<?= ROOT ?>img/uploads/<?= $mediaPath ?>" style="width: 250px; height: 250px; overflow: hidden; object-fit: content;">
                 <?php } ?>
             </div>
 
