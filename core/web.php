@@ -40,7 +40,6 @@ Router::post("register", function () {
 });
 
 Router::get("profile", function () {
-
     $profile = new ProfileCtrl();
     $profile->viewProfilePage();
 });

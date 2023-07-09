@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 01, 2023 at 11:58 AM
+-- Generation Time: Jul 09, 2023 at 01:36 AM
 -- Server version: 8.0.33
 -- PHP Version: 8.1.20
 
@@ -47,7 +47,8 @@ INSERT INTO `comment` (`id`, `author`, `post_id`, `replied_to`, `content`, `date
 (130, 'test', 40, 129, 'replying to comment 2', '2023-07-01 18:25:57'),
 (131, 'test', 40, 130, 'testing nesting comment', '2023-07-01 18:26:00'),
 (132, 'test', 40, 129, 'second reply to comment 2', '2023-07-01 18:26:15'),
-(133, 'test', 40, 131, 'even deeper nesting comment', '2023-07-01 18:27:15');
+(133, 'test', 40, 131, 'even deeper nesting comment', '2023-07-01 18:27:15'),
+(134, 'juan', 40, 133, 'reply by juan', '2023-07-04 12:54:06');
 
 -- --------------------------------------------------------
 
@@ -62,6 +63,13 @@ CREATE TABLE `deleted` (
   `deleted_by` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `date_created` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `deleted`
+--
+
+INSERT INTO `deleted` (`id`, `post_id`, `comment_id`, `deleted_by`, `date_created`) VALUES
+(36, NULL, 134, 'juan', '2023-07-04 12:54:09');
 
 -- --------------------------------------------------------
 
@@ -83,7 +91,9 @@ INSERT INTO `media` (`id`, `path`, `uploader`) VALUES
 (1, 'default_avatar.png', 'admin'),
 (7, '64998c35dd7344.74870275.png', 'admin'),
 (12, '649a9299a32698.73479700.png', 'test'),
-(18, '649e8f7d99bdc3.65469515.jpg', 'test');
+(18, '649e8f7d99bdc3.65469515.jpg', 'test'),
+(21, '64a135eecf41b6.48829593.png', 'test'),
+(22, '64a1379608fc59.57277149.png', 'test');
 
 -- --------------------------------------------------------
 
@@ -127,7 +137,8 @@ INSERT INTO `post` (`id`, `author`, `title`, `content`, `media_id`, `tags`, `dat
 (38, 'admin', 'The Latest Technology Innovations', 'Technology is constantly innovating and creating new solutions to old problems. In this post, we discuss some of the latest technology innovations and their potential impact on our lives.', NULL, 'technology, future', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (39, 'Luke', 'The Science of Aging', 'Aging is a natural process that affects us all. In this post, we explore the science behind aging and how to age gracefully.', NULL, 'science, health', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
 (40, 'Sophie', 'The Art of Dance', 'Dance is a beautiful art form that allows us to express ourselves and connect with others. In this post, we explore the art of dance and share some tips for improving your dancing skills.', NULL, 'art, dance', '2023-06-19 08:58:23', '2023-06-24 08:31:36'),
-(43, 'test', 'This is a test post', 'Written as user named \"test\". Testing `date_modified` field. Presenting editing post.', 18, 'science, health', '2023-06-20 14:03:08', '2023-06-30 15:17:01');
+(43, 'test', 'This is a test post', 'Written as user named \"test\". Testing `date_modified` field. Presenting editing post.', 22, 'science, health', '2023-06-20 14:03:08', '2023-07-02 15:38:46'),
+(51, 'test', 'Another post by test', 'Some content to fill in the blank', 21, 'test', '2023-07-02 15:31:42', '2023-07-02 15:31:42');
 
 -- --------------------------------------------------------
 
@@ -150,7 +161,10 @@ CREATE TABLE `report` (
 
 INSERT INTO `report` (`id`, `post_id`, `comment_id`, `reporter`, `reason`, `date_created`) VALUES
 (25, 27, NULL, 'test', 'It\'s misleading', '2023-06-29 20:45:13'),
-(29, NULL, 129, 'test', 'It\'s inappropriate', '2023-07-01 18:26:35');
+(29, NULL, 129, 'test', 'It\'s inappropriate', '2023-07-01 18:26:35'),
+(33, 43, NULL, 'test', 'It\'s spam', '2023-07-02 15:32:28'),
+(35, 40, NULL, 'test', 'It\'s spam', '2023-07-03 13:05:36'),
+(41, 40, NULL, 'test1', 'It\'s offensive', '2023-07-04 12:40:17');
 
 -- --------------------------------------------------------
 
@@ -172,7 +186,9 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`username`, `password`, `role`, `avatar_id`, `date_created`) VALUES
 ('admin', '$2y$10$mj2xIOWiQRH5.0wtyZRhZ.SPGMjVHly.m3nKf71Jmi2K5qJ2Ekv9C', 0, 7, '2023-06-17 16:27:25'),
-('test', '$2y$10$aqQxvrw5Tc01guZc7BJTsufIQmUDxEtBBhhMiuiU.lKdYgHmbLoWm', 1, 12, '2023-06-20 13:57:16');
+('juan', '$2y$10$szZm7WAUzlotwlcJ9BL8BOeqY/wSbSZbLy.B3eFpifyOIBcAIDdbK', 1, NULL, '2023-07-04 12:53:31'),
+('test', '$2y$10$aqQxvrw5Tc01guZc7BJTsufIQmUDxEtBBhhMiuiU.lKdYgHmbLoWm', 1, 12, '2023-06-20 13:57:16'),
+('test1', '$2y$10$YTMXQa0DWJ82StFxdZGH0eOWHcNbL99UEuIT4UThSZMuVd2NU1uCe', 1, NULL, '2023-07-03 13:01:04');
 
 -- --------------------------------------------------------
 
@@ -195,9 +211,15 @@ CREATE TABLE `voting` (
 INSERT INTO `voting` (`id`, `post_id`, `comment_id`, `voter`, `is_upvote`) VALUES
 (71, 27, NULL, 'admin', 1),
 (74, 27, NULL, 'test', 1),
-(80, 40, NULL, 'test', 1),
 (81, NULL, 128, 'test', 0),
-(82, NULL, 130, 'test', 1);
+(82, NULL, 130, 'test', 1),
+(85, 40, NULL, 'test', 1),
+(86, 43, NULL, 'test', 1),
+(87, 24, NULL, 'admin', 1),
+(88, 32, NULL, 'admin', 1),
+(89, 51, NULL, 'admin', 0),
+(90, 51, NULL, 'test1', 0),
+(91, 40, NULL, 'test1', 1);
 
 --
 -- Indexes for dumped tables
@@ -277,37 +299,37 @@ ALTER TABLE `voting`
 -- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=135;
 
 --
 -- AUTO_INCREMENT for table `deleted`
 --
 ALTER TABLE `deleted`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `media`
 --
 ALTER TABLE `media`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
 
 --
 -- AUTO_INCREMENT for table `report`
 --
 ALTER TABLE `report`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `voting`
 --
 ALTER TABLE `voting`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=83;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- Constraints for dumped tables
